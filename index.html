@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#11243a">
+<meta name="description" content="Administración de expensas y recibos de Scaffidi Propiedades.">
+<title>Scaffidi Propiedades · Expensas</title>
+<style>
+:root{--navy:#11243a;--navy2:#1d3550;--blue:#2459d3;--blue-light:#edf3ff;--ink:#172b42;--muted:#617184;--line:#e0e6ed;--bg:#f4f6fa;--white:#fff;--green:#146c51;--red:#aa3443;--amber:#865914;--radius:14px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button,a,input,select,textarea{outline-offset:4px}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}a{color:var(--blue)}button:focus-visible,a:focus-visible{outline:3px solid #92b1ff}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}button svg{pointer-events:none}h1,h2,h3,p{margin-top:0}h1{font-size:30px;letter-spacing:-1px;line-height:1.2;margin-bottom:9px}h2{font-size:20px;letter-spacing:-.4px;margin-bottom:8px}h3{font-size:16px;margin-bottom:7px}p{line-height:1.6}small,.small{font-size:13px} .muted{color:var(--muted)}.eyebrow{font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}.mono{font-variant-numeric:tabular-nums}.shell{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}.sidebar{background:var(--navy);color:#fff;padding:34px 22px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}.brand{display:flex;gap:12px;align-items:center;padding:0 5px 35px}.monogram{width:42px;height:46px;border:1px solid #8295a9;display:grid;place-items:center;font-family:Georgia,serif;font-size:31px}.wordmark{font-family:Georgia,serif;font-size:26px;letter-spacing:.5px}.wordmark small{font-family:inherit;display:block;font-size:10px;text-transform:uppercase;letter-spacing:3.6px;margin-top:4px}.sidebar-label{font-size:11px;text-transform:uppercase;letter-spacing:1.8px;color:#9dafc3;padding:18px 12px 12px}.nav{display:grid;gap:6px}.nav button{border:0;color:#bccadc;background:transparent;text-align:left;display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:8px;font-size:14px;font-weight:500}.nav button:hover{background:#ffffff09;color:#fff}.nav button.active{color:#fff;background:#28425e;box-shadow:inset 3px 0 #8baeff}.sidebar-bottom{margin-top:auto;padding-top:30px}.local-label{display:flex;gap:9px;align-items:center;font-size:12px;color:#c1cddd;padding:18px 10px 0;border-top:1px solid #ffffff20}.workspace{min-width:0}.topbar{height:80px;background:#fff;border-bottom:1px solid var(--line);padding:0 40px;display:flex;align-items:center;justify-content:space-between;gap:20px}.breadcrumb{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:10px}.breadcrumb strong{color:var(--ink);font-weight:500}.account{display:flex;gap:12px;align-items:center;font-size:13px}.avatar{height:36px;width:36px;display:grid;place-items:center;background:var(--blue-light);color:var(--blue);border-radius:50%;font-weight:700;font-size:12px}.main{max-width:1550px;margin:auto;padding:36px 40px 30px}.page-head{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:28px}.page-head p{color:var(--muted);font-size:14px;margin:0}.btn{border:1px solid var(--line);border-radius:8px;padding:11px 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:white;color:var(--ink);font-weight:600;font-size:14px;text-decoration:none;min-height:42px}.btn:hover{background:#f4f7fc}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.primary:hover{background:#1748bd}.btn.danger{color:var(--red);background:#fff6f6;border-color:#efccd0}.btn.small{padding:7px 11px;min-height:34px;font-size:13px}.btn.ghost{background:transparent;border-color:transparent}.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-bottom:26px}.stat{padding:23px;background:#fff;border:1px solid var(--line);border-radius:var(--radius)}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}.stat-top svg{color:#7890aa;width:19px}.stat strong{display:block;font-size:28px;letter-spacing:-1px;line-height:1.4;margin:12px 0 4px;font-weight:650;overflow-wrap:anywhere}.stat small{color:var(--muted)}.stat.featured{background:var(--navy);border-color:var(--navy);color:#fff}.stat.featured .stat-top,.stat.featured small,.stat.featured svg{color:#bdcde0}.panel{border:1px solid var(--line);border-radius:var(--radius);background:#fff;overflow:hidden;margin-bottom:22px}.panel-header{padding:23px 25px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}.panel-header p{font-size:14px;color:var(--muted);margin:5px 0 0}.panel-body{padding:26px}.grid-two{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:22px;align-items:start}.welcome{background:linear-gradient(115deg,#f1f5ff,#fff);padding:30px;display:flex;align-items:center;justify-content:space-between;gap:24px;border:1px solid #d9e3fb;border-radius:var(--radius);margin-bottom:26px}.welcome p{margin:8px 0 0;font-size:14px;color:var(--muted);max-width:560px}.badge{display:inline-flex;align-items:center;gap:5px;background:#eef2f7;color:#536579;font-size:12px;font-weight:600;border-radius:5px;padding:5px 8px;white-space:nowrap}.badge.success{color:var(--green);background:#e9f5ef}.badge.warning{color:var(--amber);background:#fff4de}.badge.danger{color:var(--red);background:#faecee}.badge.blue{color:var(--blue);background:var(--blue-light)}.empty{padding:42px 25px;text-align:center}.empty-icon{width:54px;height:54px;background:#f0f4fa;color:#7188a3;border-radius:14px;display:grid;place-items:center;margin:0 auto 18px}.empty-icon svg{width:25px;height:25px}.empty p{max-width:410px;margin:8px auto 20px;color:var(--muted);font-size:14px}.step-row{display:flex;gap:14px;padding:17px 0;border-bottom:1px solid var(--line)}.step-row:last-child{border:0}.step-num{flex:none;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:#eff3f9;color:#6c8198;font-size:12px;font-weight:700}.step-row p{font-size:13px;color:var(--muted);margin:4px 0 0}.step-row.done .step-num{background:#e9f5ef;color:var(--green)}.footer{display:flex;justify-content:space-between;gap:20px;color:#778698;font-size:12px;margin-top:12px;padding:5px 0}.hidden{display:none!important}.notice{background:#edf3ff;border:1px solid #d6e2ff;border-radius:9px;padding:13px 16px;font-size:14px;line-height:1.5;margin-bottom:20px}.notice.warning{background:#fff8e9;border-color:#f1dfb8;color:#745117}.notice.error{background:#fff0f1;border-color:#edc0c5;color:#9d2538}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;text-align:left;font-size:14px}th{background:#f8fafc;color:var(--muted);font-size:12px;font-weight:600;padding:13px 24px;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:17px 24px;border-bottom:1px solid #edf0f5}tbody tr:last-child td{border:0}td small{display:block;margin-top:5px;color:var(--muted)}.num{text-align:right;font-variant-numeric:tabular-nums}.table-actions{display:flex;gap:6px;justify-content:flex-end}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:19px 22px}.field{display:flex;flex-direction:column;gap:8px;min-width:0}.field.full{grid-column:1/-1}label,.label{font-size:14px;font-weight:600}.field small{color:var(--muted);line-height:1.4}input,select,textarea{border:1px solid #ccd6e1;border-radius:7px;background:#fff;color:var(--ink);padding:11px 12px;width:100%;min-height:43px;font-size:14px}input:focus,select:focus,textarea:focus{outline:2px solid #cfddfb;border-color:var(--blue)}input:disabled,select:disabled{background:#f2f4f7;color:#718097}textarea{resize:vertical;min-height:80px}input[type=checkbox]{width:17px;min-height:17px;height:17px;accent-color:var(--blue)}.check{display:flex;gap:10px;align-items:center;font-weight:400}.form-foot{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}.section-title{grid-column:1/-1;padding-top:9px;font-size:14px;margin:0;border-bottom:1px solid var(--line);padding-bottom:10px}.tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin-bottom:24px}.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:12px 5px;color:var(--muted);font-size:14px}.tabs button.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.toolbar input,.toolbar select{width:auto;max-width:250px}.progress-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:26px}.progress-step{border-top:3px solid var(--line);padding-top:12px;color:var(--muted);font-size:13px}.progress-step.active{border-color:var(--blue);color:var(--blue);font-weight:600}.progress-step.complete{border-color:var(--green);color:var(--green)}dialog{border:0;border-radius:16px;padding:0;width:650px;max-width:calc(100vw - 32px);max-height:90vh;box-shadow:0 25px 90px #07172d40;color:var(--ink)}dialog::backdrop{background:#0b1c36a6;backdrop-filter:blur(2px)}.dialog-head{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;border-bottom:1px solid var(--line)}.dialog-head h2{margin:0}.dialog-body{padding:26px}.dialog-error{margin-top:16px}.close{width:34px;height:34px;border:0;background:#f2f4f8;border-radius:7px;color:var(--muted);font-size:24px}.summary-list{display:grid;gap:0}.summary-line{display:flex;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px}.summary-line:last-child{border:0}.summary-line strong{text-align:right}.amount-large{font-size:30px;letter-spacing:-1px;font-weight:650}.receipt-dialog{width:950px}.receipt-tools{padding:18px 24px;background:#f7f9fc;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.paper{background:#e9edf3;padding:24px}.receipt{max-width:790px;margin:0 auto;background:white;padding:22px;color:#111;border:1px solid #cbd2db;font-family:Arial,sans-serif;font-size:12px;position:relative}.receipt+.receipt{margin-top:24px}.receipt-header{display:grid;grid-template-columns:1fr 42px 1fr;gap:12px;border:1.5px solid #222;padding:12px}.receipt-brand{font-size:16px;font-weight:700;margin:5px 0 9px;text-transform:uppercase}.receipt-x{align-self:start;text-align:center;border:1.5px solid #222;font-family:Georgia,serif;font-size:25px;padding:4px}.receipt-heading{font-size:17px;font-weight:700;letter-spacing:2px;margin-bottom:8px}.receipt-meta{font-size:11px;line-height:1.6}.receipt-number{font-size:16px;font-weight:700;margin-bottom:7px}.receipt-row{padding:10px 12px;border:1px solid #777;border-top:0;line-height:1.8;overflow-wrap:anywhere}.receipt-copy{font-size:10px;font-weight:700;letter-spacing:1.3px;display:flex;justify-content:space-between;border-bottom:1px solid #222;padding-bottom:8px;margin-bottom:10px}.receipt-body{padding:15px 12px;border:1px solid #777;border-top:0;line-height:1.8;overflow-wrap:anywhere}.receipt-total{display:flex;justify-content:space-between;align-items:end;gap:24px;padding-top:15px;margin-top:12px}.receipt-total strong{font-size:20px}.signature{border-top:1px solid #333;min-width:210px;padding-top:5px;text-align:center;font-size:11px;margin-top:24px}.receipt-footer{margin-top:10px;font-size:10px;text-align:center;color:#444}.receipt-void{color:#a00;border:2px solid #a00;padding:6px;margin-bottom:10px;text-align:center;font-weight:bold}.receipt table{font-size:11px;margin:8px 0}.receipt th,.receipt td{padding:5px 8px;color:#111;border-bottom:1px solid #bbb;background:white;font-size:11px}.cut-line{text-align:center;font-size:11px;color:#657285;margin:17px auto;border-top:1px dashed #9da9b6;padding-top:7px;max-width:790px}.toast{position:fixed;bottom:25px;right:30px;border-radius:9px;padding:14px 20px;max-width:480px;background:var(--navy);color:white;box-shadow:0 6px 25px #11243a25;font-size:14px;z-index:20}.allocation-list{border:1px solid var(--line);border-radius:9px;padding:0 16px;margin-top:12px;max-height:260px;overflow:auto}.allocation{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);gap:15px;font-size:14px}.allocation:last-child{border:0}.allocation label{font-weight:400}.balance-box{background:#f5f8fd;border-radius:9px;padding:20px;margin:20px 0}.person-cell{display:flex;gap:11px;align-items:center}.initials{width:34px;height:34px;border-radius:9px;background:#eef2f8;color:#566f8e;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}.amount-input{max-width:165px;text-align:right}.search-input{min-width:210px}.callout{border-left:3px solid var(--blue);padding:4px 0 4px 14px;margin:20px 0;font-size:14px;color:var(--muted)}#print-root{display:none}.fatal{max-width:650px;margin:60px auto;background:#fff;padding:30px;border:1px solid var(--line);border-radius:14px}
+@media(min-width:1600px){.main{padding-top:45px}.stats{gap:22px}.stat{padding:27px}}
+@media(max-width:1100px){.shell{grid-template-columns:205px minmax(0,1fr)}.sidebar{padding:28px 14px}.brand{gap:9px}.wordmark{font-size:22px}.topbar{padding:0 25px}.main{padding:28px 25px}.stat{padding:18px}.stat strong{font-size:23px}.grid-two{grid-template-columns:1fr}.stats{gap:12px}}
+@media(max-width:760px){.shell{display:block}.sidebar{position:relative;height:auto;padding:18px}.brand{padding-bottom:18px}.sidebar-label,.sidebar-bottom{display:none}.nav{display:flex;overflow:auto;gap:3px}.nav button{white-space:nowrap;padding:10px}.nav button svg{display:none}.topbar{height:62px;padding:0 18px}.account span{display:none}.main{padding:24px 16px}.page-head{align-items:start;flex-wrap:wrap}.page-head h1{font-size:26px}.stats{grid-template-columns:1fr 1fr}.stat strong{font-size:23px}.welcome{padding:22px;flex-direction:column;align-items:start}.form-grid{grid-template-columns:1fr}.panel-body,.dialog-body{padding:20px}.panel-header{padding:20px;align-items:start;flex-wrap:wrap}.progress-step{font-size:12px}.footer{flex-wrap:wrap}.receipt-header{gap:8px;grid-template-columns:1fr 28px 1fr}.receipt{padding:12px}.paper{padding:10px}.signature{min-width:130px}.receipt-number{font-size:13px}.receipt-brand{font-size:13px}.receipt-total strong{font-size:17px}.toast{left:16px;right:16px;bottom:16px}.form-foot{flex-wrap:wrap}}
+@media print{@page{size:A4 portrait;margin:8mm}html,body{background:white!important;margin:0!important;padding:0!important}.shell,dialog,.toast,.fatal{display:none!important}#print-root{display:block!important}.receipt{border:0;width:194mm;max-width:none;padding:3mm;margin:0;font-size:10pt;break-inside:avoid;page-break-inside:avoid}.receipt-header{padding:3mm;gap:3mm}.receipt-brand{font-size:12pt}.receipt-heading{font-size:13pt}.receipt-meta{font-size:8pt}.receipt-number{font-size:12pt}.receipt-row{padding:2mm 3mm;font-size:9pt}.receipt-body{padding:3mm;line-height:1.6;font-size:9pt}.receipt-total{padding-top:2mm;margin-top:2mm}.receipt-footer{margin-top:2mm;font-size:7pt}.receipt-copy{font-size:8pt}.receipt table,.receipt th,.receipt td{font-size:8pt}.receipt-total strong{font-size:14pt}.signature{font-size:8pt}.cut-line{margin:3mm auto;padding-top:1mm;font-size:7pt}.print-pair{break-after:page;page-break-after:always}.print-pair:last-child{break-after:auto;page-break-after:auto}body:not(.printing) #print-root::before{content:"Para imprimir recibos, abrí un comprobante y elegí Imprimir original y duplicado."}}
+/* Recibos 1.1: composición de imprenta, en blanco y negro. */
+.receipt-dialog{width:1060px}
+.paper{padding:28px;background:#e6eaf0;overflow-x:auto}
+.print-pair{width:100%;max-width:880px;margin:0 auto 26px}
+.print-pair:last-child{margin-bottom:0}
+.receipt{max-width:none;width:100%;margin:0;padding:0;border:1.5px solid #222b35;border-radius:8px;background:#fff;color:#17202a;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.35;box-shadow:0 3px 12px #14273f0a}
+.receipt *{box-sizing:border-box}
+.r-copybar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:8px 19px;border-bottom:1px solid #222b35;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.r-copytag{border:1px solid #222b35;border-radius:2px;padding:3px 8px;letter-spacing:1.5px;font-weight:700;white-space:nowrap}
+.r-copybar .r-agency{overflow-wrap:anywhere;text-align:right}
+.r-preview,.r-annulled{border-bottom:1px solid #222b35;padding:5px 12px;text-align:center;font-size:10px;letter-spacing:1px;font-weight:700}
+.r-annulled{color:#a12435;border-color:#a12435}
+.r-header{display:grid;grid-template-columns:51% 49%;position:relative;border-bottom:1.5px solid #222b35}
+.r-issuer{display:flex;flex-direction:column;justify-content:space-between;padding:20px 28px 15px 20px;border-right:1px solid #222b35;gap:18px;min-width:0}
+.r-issuer-label{font-size:10px;font-weight:700;letter-spacing:1.4px;margin:0 0 9px;text-transform:uppercase}
+.r-building{font-family:Georgia,"Times New Roman",serif;font-size:28px;font-weight:700;letter-spacing:-.5px;line-height:1.15;text-transform:uppercase;overflow-wrap:anywhere}
+.r-address{font-size:11px;line-height:1.45;margin-top:12px;overflow-wrap:anywhere}
+.r-issuer-bottom{border-top:1px solid #9ba2a9;padding-top:7px;font-size:10px;letter-spacing:.5px;text-transform:uppercase}
+.r-x{position:absolute;left:51%;top:20px;transform:translateX(-50%);border:1.5px solid #222b35;border-radius:3px;background:white;width:33px;height:37px;display:grid;place-items:center;font-family:Georgia,serif;font-size:25px;font-weight:700}
+.r-identification{padding:15px 20px 13px 28px;min-width:0}
+.r-heading{font-family:Georgia,"Times New Roman",serif;letter-spacing:4px;font-size:21px;font-weight:700;line-height:1;margin-bottom:9px}
+.r-number{font-family:"Courier New",monospace;font-size:23px;font-weight:700;letter-spacing:.3px;font-variant-numeric:tabular-nums;white-space:nowrap;margin-bottom:10px}
+.r-number span{font-family:Arial,sans-serif;font-size:12px;font-weight:500;margin-right:4px}
+.r-date{display:flex;align-items:center;gap:15px;margin-bottom:10px}
+.r-date-label{font-size:9px;letter-spacing:1.8px;font-weight:700}
+.r-date-boxes{display:grid;grid-template-columns:1fr 1fr 1.4fr;border:1px solid #505963;border-radius:4px;min-width:158px;overflow:hidden}
+.r-date-boxes span{font-size:12px;line-height:1.4;letter-spacing:1px;padding:4px 9px;text-align:center;font-variant-numeric:tabular-nums}
+.r-date-boxes span+span{border-left:1px solid #505963}
+.r-tax{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:2px 10px;margin:0;font-size:10px;line-height:1.4}
+.r-tax dt,.r-tax dd{margin:0}
+.r-tax dd{text-align:right;font-weight:600;overflow-wrap:anywhere}
+.r-recipient{padding:11px 19px;border-bottom:1px solid #222b35;display:grid;gap:7px}
+.r-line{display:flex;align-items:baseline;gap:8px;min-width:0}
+.r-label{font-size:10px;font-weight:600;white-space:nowrap}
+.r-fill{flex:1;min-width:0;border-bottom:1px solid #b6bbc1;padding:0 0 2px;font-size:12px;overflow-wrap:anywhere}
+.r-recipient-meta{display:flex;gap:22px;flex-wrap:wrap;font-size:10px;line-height:1.4}
+.r-recipient-meta span{overflow-wrap:anywhere}
+.r-content{padding:12px 19px 0}
+.r-words{border:1px solid #bdc2c8;background:#f7f8fa;padding:8px 11px;margin-bottom:10px}
+.r-caption{display:block;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:4px}
+.r-words-value{font-family:Georgia,"Times New Roman",serif;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.r-unit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;margin-bottom:10px}
+.r-concept{font-size:11px;margin-bottom:6px}
+.receipt .r-periods{width:100%;font-size:11px;border-collapse:collapse;margin:0 0 8px;table-layout:fixed}
+.receipt .r-periods th,.receipt .r-periods td{padding:5px 9px;background:transparent;color:#17202a;font-size:11px;border-bottom:1px solid #cbd0d5;overflow-wrap:anywhere}
+.receipt .r-periods th{font-size:9px;text-transform:uppercase;letter-spacing:.6px;font-weight:600;border-top:1px solid #8b939c;border-bottom:1px solid #8b939c}
+.receipt .r-periods th:last-child{width:31%}
+.receipt .r-periods tr:last-child td{border-bottom:1px solid #8b939c}
+.r-method{font-size:10px;margin-top:6px;overflow-wrap:anywhere}
+.r-note{font-size:10px;margin-top:5px;line-height:1.4;overflow-wrap:anywhere}
+.r-disclaimer{font-size:10px;margin:8px 0 0}
+.r-closing{display:grid;grid-template-columns:40% minmax(0,1fr);gap:22px;align-items:stretch;padding:13px 19px 12px}
+.r-total{border:1.5px solid #222b35;border-radius:3px;padding:10px 13px;display:flex;flex-direction:column;justify-content:center;min-height:76px}
+.r-total-value{font-size:27px;letter-spacing:-.5px;font-weight:700;line-height:1.25;font-variant-numeric:tabular-nums;white-space:nowrap}
+.r-signature{border:1px solid #636d77;border-radius:3px;display:grid;align-content:end;gap:11px;padding:13px 15px;min-height:76px}
+.r-signline{display:flex;align-items:baseline;gap:7px;font-size:11px}
+.r-signline span:last-child{border-bottom:1px solid #636d77;min-height:16px;flex:1;overflow-wrap:anywhere}
+.r-consumer{border-top:1px solid #a3abb3;margin:0 19px;padding:6px 0;text-align:center;font-size:9px;font-weight:700;font-style:italic;letter-spacing:.35px;overflow-wrap:anywhere}
+.r-footer{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #222b35;padding:6px 19px;font-size:9px;color:#414d5a;line-height:1.4}
+.r-continuation{padding:0 19px 6px;text-align:center;font-size:9px}
+.cut-line{max-width:none;display:flex;align-items:center;justify-content:center;gap:14px;margin:16px 0;padding:0;border:0;color:#798491;font-family:Arial,sans-serif;font-size:10px}
+.cut-line:before,.cut-line:after{content:"";flex:1;border-top:1px dashed #9aa4af}
+@media(max-width:760px){
+ .paper{padding:14px}
+ .print-pair{min-width:690px}
+ .receipt-tools .btn.primary{font-size:12px}
+}
+@media print{
+ @page{size:A4 portrait;margin:8mm}
+ .print-pair{width:auto;max-width:none;margin:0;break-after:page;page-break-after:always}
+ .print-pair:last-child{break-after:auto;page-break-after:auto}
+ .receipt{width:100%;max-width:none;margin:0;padding:0;border:1.2pt solid #202020;border-radius:2mm;box-shadow:none;font-size:8pt;color:#111;break-inside:avoid;page-break-inside:avoid}
+ .r-copybar{padding:1mm 4mm;gap:3mm;font-size:6.5pt;line-height:1.1;letter-spacing:.5pt}
+ .r-copytag{padding:.35mm 1.5mm;font-size:6.5pt}
+ .r-preview,.r-annulled{padding:.7mm 3mm;font-size:6.5pt;line-height:1.1}
+ .r-header{grid-template-columns:51% 49%;border-bottom:1pt solid #222}
+ .r-issuer{padding:3.5mm 6mm 2.5mm 4mm;gap:3mm}
+ .r-issuer-label{font-size:7pt;letter-spacing:.8pt;margin-bottom:2mm}
+ .r-building{font-size:19pt;line-height:1.1;letter-spacing:-.3pt}
+ .r-address{font-size:7.5pt;line-height:1.3;margin-top:2.5mm}
+ .r-issuer-bottom{padding-top:1.5mm;font-size:7pt}
+ .r-x{top:4mm;width:7.5mm;height:8.5mm;font-size:18pt;border-width:1pt}
+ .r-identification{padding:2.5mm 4mm 2mm 6mm}
+ .r-heading{font-size:13pt;letter-spacing:3pt;margin-bottom:1mm}
+ .r-number{font-size:15pt;line-height:1.1;letter-spacing:.1pt;margin-bottom:1.5mm}
+ .r-number span{font-size:8pt}
+ .r-date{gap:3mm;margin-bottom:1.5mm}
+ .r-date-label{font-size:6.5pt;letter-spacing:1pt}
+ .r-date-boxes{min-width:34mm}
+ .r-date-boxes span{font-size:7.5pt;padding:.5mm 2mm;line-height:1.1}
+ .r-tax{font-size:7pt;line-height:1.2;gap:.25mm 2mm}
+ .r-recipient{padding:1.5mm 4mm;gap:1mm;line-height:1.15}
+ .r-label{font-size:7.5pt}
+ .r-fill{font-size:8pt;padding-bottom:.4mm}
+ .r-recipient-meta{font-size:7pt;gap:4mm}
+ .r-content{padding:2mm 4mm 0}
+ .r-words{padding:1.2mm 2.5mm;margin-bottom:1.5mm}
+ .r-caption{font-size:6.5pt;line-height:1.1;letter-spacing:.6pt;margin-bottom:.6mm}
+ .r-words-value{font-size:10pt;line-height:1.2}
+ .r-unit{gap:4mm;margin-bottom:1.5mm}
+ .r-concept{font-size:8pt;margin-bottom:1mm}
+ .receipt .r-periods{margin:0 0 1mm;font-size:8pt}
+ .receipt .r-periods th,.receipt .r-periods td{padding:1mm 2mm;font-size:7.5pt;line-height:1.2}
+ .receipt .r-periods th{font-size:6.5pt;letter-spacing:.3pt}
+ .r-method,.r-note{font-size:7.5pt;margin-top:1mm;line-height:1.3}
+ .r-disclaimer{font-size:7pt;margin:1.5mm 0 0}
+ .r-closing{padding:2mm 4mm;gap:5mm}
+ .r-total{padding:1.5mm 3mm;min-height:14mm;border-width:1pt}
+ .r-total-value{font-size:20pt;letter-spacing:-.3pt}
+ .r-signature{padding:1.5mm 3mm;gap:2mm;min-height:14mm}
+ .r-signline{font-size:8pt;gap:2mm}
+ .r-signline span:last-child{min-height:3.5mm}
+ .r-consumer{margin:0 4mm;padding:1.2mm 0;font-size:6.8pt;letter-spacing:.15pt}
+ .r-footer{padding:1.2mm 4mm;font-size:6.5pt;line-height:1.2}
+ .r-continuation{padding:0 4mm 1mm;font-size:6.5pt}
+ .cut-line{margin:3mm 0;padding:0;font-size:6pt;line-height:1;gap:3mm}
+}
+
+</style>
+</head>
+<body>
+<div class="shell" id="app">
+<aside class="sidebar"><div class="brand"><div class="monogram">S</div><div class="wordmark">Scaffidi<small>Propiedades</small></div></div><div class="sidebar-label">Administración</div><nav class="nav" id="navigation" aria-label="Navegación principal"></nav><div class="sidebar-bottom"><div class="local-label"><span>Guardado en esta computadora<br><span style="color:#8ea3bb">Versión local · 1.1</span></span></div></div></aside>
+<div class="workspace"><header class="topbar"><div class="breadcrumb">Consorcios <span>/</span> <strong id="consortium-label">25 de Mayo 1246</strong></div><div class="account"><span>Scaffidi Propiedades</span><div class="avatar">SP</div></div></header><main class="main" id="main" tabindex="-1">
+<div class="page-head"><div><div class="eyebrow">Scaffidi Propiedades</div><h1>Expensas, bajo control.</h1><p>Un espacio para administrar tu consorcio y sus recibos.</p></div></div>
+<div class="welcome"><div><span class="badge blue">Configuración inicial</span><h2 style="margin-top:16px">Empezá por los datos de tu consorcio</h2><p>Cargá las unidades y sus responsables. Después vas a poder registrar pagos e imprimir los recibos.</p></div><button class="btn primary" onclick="location.hash='configuracion'">Configurar consorcio →</button></div>
+<div class="stats"><div class="stat featured"><div class="stat-top">Cobrado este mes</div><strong>$ 0,00</strong><small>Sin pagos registrados</small></div><div class="stat"><div class="stat-top">Saldo pendiente total</div><strong>$ 0,00</strong><small>Todos los períodos</small></div><div class="stat"><div class="stat-top">Unidades registradas</div><strong>0</strong><small>Tu consorcio</small></div><div class="stat"><div class="stat-top">Recibos emitidos</div><strong>0</strong><small>Numeración correlativa</small></div></div>
+<div class="grid-two"><section class="panel"><div class="panel-header"><h2>Estado de las unidades</h2><span class="badge">Sin unidades</span></div><div class="empty"><h3>Todo comienza con la primera unidad</h3><p>Agregá los departamentos y las personas para llevar sus cuentas.</p></div></section><section class="panel"><div class="panel-header"><h2>Tu puesta en marcha</h2></div><div class="panel-body"><div class="step-row"><span class="step-num">1</span><div><h3>Consorcio y numeración</h3><p>Los datos que aparecerán en tus recibos.</p></div></div><div class="step-row"><span class="step-num">2</span><div><h3>Unidades y personas</h3><p>Cada departamento con su responsable.</p></div></div><div class="step-row"><span class="step-num">3</span><div><h3>Saldos iniciales</h3><p>Un punto de partida para cada cuenta.</p></div></div></div></section></div>
+</main></div></div><div id="print-root"></div><dialog id="dialog" aria-labelledby="dialog-title"></dialog><div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<noscript>Necesitás activar JavaScript en tu navegador para usar esta aplicación.</noscript>
+<script id="accounting-core">
+'use strict';
+const Ledger = (() => {
+  const MAX = 99999999999;
+  const require = (ok, message) => { if (!ok) throw new Error(message); };
+  const id = () => globalThis.crypto?.randomUUID?.() || 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2);
+  const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+  const isPeriod = s => typeof s === 'string' && /^(19|20|21)\d{2}-(0[1-9]|1[0-2])$/.test(s);
+  const isDate = s => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && isPeriod(s.slice(0,7)) && !Number.isNaN(Date.parse(s+'T12:00:00Z')) && new Date(s+'T12:00:00Z').toISOString().slice(0,10) === s;
+  const cents = (input, allowZero = false) => {
+    const value = String(input).trim();
+    require(/^(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d{1,2})?$/.test(value), 'Ingresá un importe válido: por ejemplo, 218.360 o 218.360,50.');
+    const [whole, fraction=''] = value.replaceAll('.','').split(',');
+    const result = Number(whole)*100 + Number(fraction.padEnd(2,'0'));
+    require(Number.isSafeInteger(result) && result <= MAX && result >= (allowZero ? 0 : 1), 'El importe debe ser mayor a cero y menor a $ 1.000.000.000.');
+    return result;
+  };
+  // Fixed source values from the user's talonario. Only fill absent fields,
+  // and only for its CUIT. Never replace a saved value or read live settings
+  // when rendering an already-issued receipt.
+  const referenceReceipt = Object.freeze({grossIncome:'No Agravado',establishment:'01-No Agravado-00',stampOffice:'01 Sede Central',consumerNotice:'DEFENSA DEL CONSUMIDOR MZA. TEL.: 0800 222 6678'});
+  function receiptConfig(config){
+    const matchesReference=String(config.cuit||'').replace(/\D/g,'')==='30714960934';
+    const result={...config};
+    for(const key of Object.keys(referenceReceipt))if(result[key]===undefined)result[key]=matchesReference?referenceReceipt[key]:'';
+    return result;
+  }
+  const fresh = () => ({version:1, revision:0, setupStep:1, config:receiptConfig({agency:'Scaffidi Propiedades',name:'Consorcio de Propietarios 25 de Mayo 1246',address:'25 de Mayo 1246 · Ciudad (5500) · Mendoza',cuit:'30-71496093-4',vat:'IVA - No alcanzado',startActivity:'2014-11-07',prefix:'0001',lastNumber:null,signer:'',configured:false}), people:[],units:[],charges:[],payments:[]});
+  const activePayments = s => s.payments.filter(p=>!p.voidedAt);
+  const paid = (s,chargeId) => activePayments(s).reduce((sum,p)=>sum+p.allocations.filter(a=>a.chargeId===chargeId).reduce((v,a)=>v+a.amount,0),0);
+  const remaining = (s,c) => c.amount - paid(s,c.id);
+  const outstanding = (s,unitId) => s.charges.filter(c=>!unitId || c.unitId===unitId).reduce((sum,c)=>sum+remaining(s,c),0);
+  const debts = (s,unitId) => s.charges.filter(c=>(!unitId || c.unitId===unitId) && remaining(s,c)>0).sort((a,b)=>a.period.localeCompare(b.period));
+  function addCharge(s, data) {
+    require(s.units.some(u=>u.id===data.unitId),'La unidad no existe.');
+    require(isPeriod(data.period),'Seleccioná un mes válido.');
+    require(Number.isSafeInteger(data.amount) && data.amount>0 && data.amount<=MAX,'El importe no es válido.');
+    require(!s.charges.some(c=>c.unitId===data.unitId && c.period===data.period),'Esa unidad ya tiene un importe cargado para ese período.');
+    const charge={id:id(),unitId:data.unitId,period:data.period,amount:data.amount,kind:data.kind==='opening'?'opening':'monthly',createdAt:new Date().toISOString()};
+    s.charges.push(charge); return charge;
+  }
+  function issue(s,data) {
+    require(s.config.configured,'Terminá la configuración inicial antes de emitir recibos.');
+    require(Number.isInteger(s.config.lastNumber) && s.config.lastNumber<99999999,'Revisá el último número de recibo en Configuración.');
+    const unit=s.units.find(u=>u.id===data.unitId);
+    require(unit,'La unidad no existe.');
+    require(typeof data.payer==='string' && data.payer.trim().length>1 && data.payer.length<=120,'Completá el nombre de quien paga.');
+    require(isDate(data.date) && data.date<=today(),'La fecha del pago no puede ser futura ni inválida.');
+    require(['Efectivo','Transferencia','Cheque','Otro'].includes(data.method),'Elegí el medio de pago.');
+    require(Number.isSafeInteger(data.amount) && data.amount>0 && data.amount<=MAX,'El importe no es válido.');
+    require(typeof data.note==='string' && data.note.length<=240,'La observación puede tener hasta 240 caracteres.');
+    require(Array.isArray(data.chargeIds) && data.chargeIds.length>0,'Seleccioná los períodos que se pagan.');
+    require(new Set(data.chargeIds).size===data.chargeIds.length,'Hay períodos repetidos.');
+    const selected=data.chargeIds.map(cid=>s.charges.find(c=>c.id===cid));
+    require(selected.every(c=>c && c.unitId===unit.id && remaining(s,c)>0),'Algún período seleccionado ya no tiene saldo pendiente.');
+    selected.sort((a,b)=>a.period.localeCompare(b.period));
+    const available=selected.reduce((n,c)=>n+remaining(s,c),0);
+    require(data.amount<=available,'El pago supera el saldo de los períodos seleccionados.');
+    let left=data.amount;
+    const allocations=[];
+    for(const c of selected){if(!left) break; const amount=Math.min(left,remaining(s,c)); allocations.push({chargeId:c.id,period:c.period,kind:c.kind,amount});left-=amount;}
+    const person=s.people.find(p=>p.id===data.payerId);
+    const sequence=s.config.lastNumber+1;
+    const payment={id:id(),sequence,prefix:s.config.prefix,number:s.config.prefix+'-'+String(sequence).padStart(8,'0'),unitId:unit.id,payerId:person?.id || '',payer:data.payer.trim(),amount:data.amount,date:data.date,method:data.method,note:data.note.trim(),allocations,snapshot:{config:receiptConfig(s.config),unit:{...unit},payer:person?{...person,name:data.payer.trim()}:{name:data.payer.trim(),address:'',cuit:'',dni:'',vat:''},balanceAfter:outstanding(s,unit.id)-data.amount},createdAt:new Date().toISOString(),voidedAt:null,voidReason:''};
+    s.payments.push(payment);s.config.lastNumber=sequence;return payment;
+  }
+  function annul(s,paymentId,reason){
+    const p=s.payments.find(p=>p.id===paymentId);
+    require(p && !p.voidedAt,'El recibo no existe o ya está anulado.');
+    require(typeof reason==='string' && reason.trim().length>=5 && reason.trim().length<=240,'Escribí el motivo de la anulación (entre 5 y 240 caracteres).');
+    p.voidedAt=new Date().toISOString();p.voidReason=reason.trim();return p;
+  }
+  function validate(s){
+    require(s && s.version===1 && Number.isSafeInteger(s.revision) && s.revision>=0,'El respaldo no corresponde a esta versión.');
+    const str=(v,max=240)=>typeof v==='string' && v.length<=max;
+    const money=v=>Number.isSafeInteger(v) && v>0 && v<=MAX;
+    const cfg=s.config;
+    require(cfg && ['agency','name','address','cuit','vat','signer'].every(k=>str(cfg[k])) && cfg.name.trim() && cfg.address.trim(),'Los datos del consorcio no son válidos.');
+    const validReceiptFields=c=>['grossIncome','establishment','stampOffice','consumerNotice'].every(k=>c[k]===undefined||str(c[k]));
+    require(validReceiptFields(cfg),'Los datos adicionales del recibo no son válidos.');
+    require(typeof cfg.configured==='boolean' && /^\d{4}$/.test(cfg.prefix) && (cfg.lastNumber===null || Number.isInteger(cfg.lastNumber)&&cfg.lastNumber>=0&&cfg.lastNumber<=99999999),'La numeración no es válida.');
+    require(!cfg.configured || cfg.lastNumber!==null,'Falta definir la numeración inicial.');
+    require(cfg.startActivity==='' || isDate(cfg.startActivity),'La fecha de inicio de actividad no es válida.');
+    require(Number.isInteger(s.setupStep) && s.setupStep>=1 && s.setupStep<=4,'El paso de configuración no es válido.');
+    const ids=new Set();
+    for(const key of ['people','units','charges','payments']){require(Array.isArray(s[key]) && s[key].length<=20000,'Los registros del respaldo no son válidos.');for(const r of s[key]){require(r && str(r.id,100) && r.id && !ids.has(r.id),'El respaldo tiene identificadores inválidos o repetidos.');ids.add(r.id);}}
+    for(const p of s.people) require(str(p.name,120)&&p.name.trim().length>1&&['dni','cuit','phone','email','address','vat'].every(k=>str(p[k])),'Hay una persona con datos inválidos.');
+    const labels=new Set();
+    for(const u of s.units){require(str(u.label,60)&&u.label.trim()&&!labels.has(u.label.toLowerCase())&&str(u.floor,30)&&str(u.apartment,30),'Hay unidades inválidas o repetidas.');labels.add(u.label.toLowerCase());require(u.percentage===null || typeof u.percentage==='number'&&Number.isFinite(u.percentage)&&u.percentage>=0&&u.percentage<=100,'El porcentaje de una unidad no es válido.');for(const key of ['ownerId','tenantId','billingPersonId'])require(typeof u[key]==='string' && (!u[key] || s.people.some(p=>p.id===u[key])),'Una unidad tiene una persona inexistente.');require(u.billingPersonId,'Una unidad no tiene responsable.');}
+    const chargeKeys=new Set();
+    for(const c of s.charges){const key=c.unitId+'|'+c.period;require(s.units.some(u=>u.id===c.unitId)&&isPeriod(c.period)&&money(c.amount)&&['opening','monthly'].includes(c.kind)&&!chargeKeys.has(key),'Hay expensas inválidas o repetidas.');chargeKeys.add(key);}
+    const numbers=new Set();
+    for(const p of s.payments){
+      require(s.units.some(u=>u.id===p.unitId)&&money(p.amount)&&isDate(p.date)&&str(p.payer,120)&&p.payer.trim().length>1&&str(p.note)&&['Efectivo','Transferencia','Cheque','Otro'].includes(p.method),'Hay un pago inválido.');
+      require(p.prefix===cfg.prefix&&Number.isInteger(p.sequence)&&p.sequence>0&&p.sequence<=cfg.lastNumber&&p.number===p.prefix+'-'+String(p.sequence).padStart(8,'0')&&!numbers.has(p.number),'Hay números de recibo inválidos o repetidos.');numbers.add(p.number);
+      require((p.voidedAt===null || typeof p.voidedAt==='string'&&Number.isFinite(Date.parse(p.voidedAt)))&&str(p.voidReason)&&(!p.voidedAt||p.voidReason.trim().length>=5),'Hay una anulación inválida.');
+      require(p.snapshot?.config && p.snapshot?.unit && p.snapshot?.payer && ['agency','name','address','cuit','vat','signer'].every(k=>str(p.snapshot.config[k])) && str(p.snapshot.unit.label,60)&&str(p.snapshot.payer.name,120)&&Number.isSafeInteger(p.snapshot.balanceAfter)&&p.snapshot.balanceAfter>=0,'Faltan los datos originales de un recibo.');
+      require(validReceiptFields(p.snapshot.config),'Un recibo tiene datos adicionales inválidos.');
+      require(Array.isArray(p.allocations)&&p.allocations.length>0&&new Set(p.allocations.map(a=>a.chargeId)).size===p.allocations.length,'Un pago tiene aplicaciones inválidas.');
+      for(const a of p.allocations){const c=s.charges.find(c=>c.id===a.chargeId);require(c&&c.unitId===p.unitId&&c.period===a.period&&money(a.amount),'Un pago está asociado a una expensa inválida.');}
+      require(p.allocations.reduce((n,a)=>n+a.amount,0)===p.amount,'Las aplicaciones no coinciden con el importe de un pago.');
+    }
+    for(const c of s.charges)require(remaining(s,c)>=0,'Hay un pago que supera las expensas cargadas.');
+    return s;
+  }
+  function words(amount){
+    const units=['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve','diez','once','doce','trece','catorce','quince','dieciséis','diecisiete','dieciocho','diecinueve','veinte','veintiuno','veintidós','veintitrés','veinticuatro','veinticinco','veintiséis','veintisiete','veintiocho','veintinueve'];
+    const apocope=t=>t.replace(/veintiuno$/,'veintiún').replace(/uno$/,'un');
+    const under=n=>{if(n<30)return units[n];if(n<100){const t=['','','','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'][Math.floor(n/10)];return t+(n%10?' y '+units[n%10]:'');}if(n===100)return 'cien';const h=['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'][Math.floor(n/100)];return h+(n%100?' '+under(n%100):'');};
+    const whole=n=>{if(n<1000)return under(n);if(n<1000000)return (Math.floor(n/1000)===1?'mil':apocope(under(Math.floor(n/1000)))+' mil')+(n%1000?' '+under(n%1000):'');return (Math.floor(n/1000000)===1?'un millón':apocope(under(Math.floor(n/1000000)))+' millones')+(n%1000000?' '+whole(n%1000000):'');};
+    const pesos=Math.floor(amount/100),fraction=amount%100;
+    const text=apocope(whole(pesos))+(pesos>=1000000&&pesos%1000000===0?' de':'')+(pesos===1?' peso':' pesos')+' con '+String(fraction).padStart(2,'0')+'/100';
+    return text.charAt(0).toUpperCase()+text.slice(1);
+  }
+  return {MAX,require,id,today,isPeriod,isDate,cents,fresh,receiptConfig,activePayments,paid,remaining,outstanding,debts,addCharge,issue,annul,validate,words};
+})();
+</script>
+<script id="application">
+'use strict';
+const STORAGE_KEY='scaffidi.expensas.v1';
+const $=s=>document.querySelector(s);
+const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=value=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',minimumFractionDigits:2}).format(value/100);
+const moneyInput=value=>(value/100).toFixed(2).replace('.',',');
+const periodLabel=p=>Ledger.isPeriod(p)?new Intl.DateTimeFormat('es-AR',{month:'long',year:'numeric'}).format(new Date(p+'-15T12:00:00')):'—';
+const dateLabel=d=>Ledger.isDate(d)?d.split('-').reverse().join('/'):'—';
+const initials=name=>String(name).split(/\s+/).filter(Boolean).slice(0,2).map(t=>t[0]).join('').toUpperCase();
+const icon=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${({grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',building:'<path d="M4 21V5h10v16M14 10h6v11M2 21h20M8 9h2M8 13h2M8 17h2M17 14h0M17 17h0"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18m-13 5h2m4 0h2"/>',wallet:'<path d="M20 7H5a2 2 0 0 1 0-4h13v4M3 5v14a2 2 0 0 0 2 2h15V7m0 6h-6v4h6"/>',receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3zm3 5h6m-6 4h6m-6 4h3"/>',settings:'<path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="currentColor"/><circle cx="15" cy="17" r="3" fill="currentColor"/>',download:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',plus:'<path d="M12 5v14M5 12h14"/>',arrow:'<path d="M5 12h14m-5-5 5 5-5 5"/>',people:'<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m1-16a3 3 0 0 1 0 6m3 10v-3a6 6 0 0 0-2-4"/>',check:'<path d="m5 12 4 4L19 6"/>',print:'<path d="M6 9V3h12v6M6 17H3V9h18v8h-3M6 14h12v7H6zM17 11h1"/>'})[name]||''}</svg>`;
+const button=(label,action,style='',id='',iconName='')=>`<button type="button" class="btn ${style}" data-action="${esc(action)}"${id?` data-id="${esc(id)}"`:''}>${iconName?icon(iconName):''}${label}</button>`;
+const option=(value,label,selected)=>`<option value="${esc(value)}"${String(value)===String(selected)?' selected':''}>${esc(label)}</option>`;
+const field=(label,name,value='',extra='',hint='')=>`<div class="field"><label for="${name}">${label}</label><input id="${name}" name="${name}" value="${esc(value)}" ${extra}>${hint?`<small>${hint}</small>`:''}</div>`;
+const personName=id=>state.people.find(p=>p.id===id)?.name || 'Sin asignar';
+const unitName=id=>state.units.find(u=>u.id===id)?.label || 'Unidad';
+const empty=(title,text,action='',label='',i='receipt')=>`<div class="empty"><div class="empty-icon">${icon(i)}</div><h3>${title}</h3><p>${text}</p>${action?button(label,action,'primary') :''}</div>`;
+const head=(title,description,actions='')=>`<div class="page-head"><div><div class="eyebrow">Administración de consorcios</div><h1>${title}</h1><p>${description}</p></div>${actions}</div>`;
+let state,lastRaw=null,storageBlocked=false,ui={month:Ledger.today().slice(0,7),unitTab:'units',receiptSearch:'',receiptStatus:'all'},modalHandler=null,toastTimer;
+function toast(message){$('#toast').textContent=message;$('#toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.add('hidden'),5000);}
+function readState(){lastRaw=localStorage.getItem(STORAGE_KEY);state=lastRaw?Ledger.validate(JSON.parse(lastRaw)):Ledger.fresh();state.config=Ledger.receiptConfig(state.config);}
+async function commit(change){
+  const run=()=>{
+    Ledger.require(!storageBlocked,'El almacenamiento no está disponible. Recuperá los datos antes de continuar.');
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(raw!==lastRaw){readState();render();throw new Error('Los datos cambiaron en otra pestaña. Cerrá este formulario y revisá el registro antes de continuar.');}
+    const next=JSON.parse(JSON.stringify(state));
+    const result=change(next);next.revision=state.revision+1;Ledger.validate(next);
+    const serialized=JSON.stringify(next);
+    try{localStorage.setItem(STORAGE_KEY,serialized);}catch(_){throw new Error('No se pudo guardar. El navegador no tiene espacio o bloqueó el almacenamiento. No se registró ningún cambio.');}
+    state=next;lastRaw=serialized;return result;
+  };
+  return location.protocol!=='file:' && navigator.locks?.request ? navigator.locks.request(STORAGE_KEY,run) : run();
+}
+function route(){const name=location.hash.slice(1);return ['resumen','unidades','expensas','pagos','recibos','configuracion','respaldos'].includes(name)?name:'resumen';}
+function navigate(to){if(route()!==to)history.pushState(null,'','#'+to);render();$('#main').focus({preventScroll:true});}
+function render(){
+  if(storageBlocked)return;
+  const current=route();
+  const nav=[['resumen','Resumen','grid'],['unidades','Unidades y personas','building'],['expensas','Expensas','calendar'],['pagos','Registrar pago','wallet'],['recibos','Recibos','receipt'],['configuracion','Configuración','settings'],['respaldos','Respaldos','download']];
+  $('#navigation').innerHTML=nav.map(([key,label,i])=>`<button data-action="nav" data-id="${key}" class="${key===current?'active':''}"${key===current?' aria-current="page"':''}>${icon(i)}${label}</button>`).join('');
+  $('#consortium-label').textContent=state.config.name.replace(/^Consorcio de Propietarios\s*/i,'');
+  const views={resumen:dashboard,unidades:unitsView,expensas:chargesView,pagos:paymentView,recibos:receiptsView,configuracion:settingsView,respaldos:backupsView};
+  $('#main').innerHTML=views[current]()+`<footer class="footer"><span>Scaffidi Propiedades · Gestión de expensas</span><span>Datos guardados solo en este navegador</span></footer>`;
+  if(current==='pagos')updatePaymentSelection();
+}
+function dashboard(){
+  const received=Ledger.activePayments(state).filter(p=>p.date.startsWith(ui.month));
+  const pendingUnits=state.units.filter(u=>Ledger.outstanding(state,u.id)>0).length;
+  const totalCharged=state.charges.filter(c=>c.period===ui.month).reduce((n,c)=>n+c.amount,0);
+  return head('Resumen del consorcio',periodLabel(ui.month).replace(/^./,s=>s.toUpperCase()),`<div class="actions"><input type="month" aria-label="Mes del resumen" id="dashboard-month" value="${ui.month}" style="width:165px">${button('Registrar pago','nav','primary','pagos','plus')}</div>`)+
+    (!state.config.configured?`<div class="welcome"><div><span class="badge blue">Configuración inicial</span><h2 style="margin-top:14px">Tu consorcio empieza acá</h2><p>Revisá los datos del recibo, agregá las unidades y definí los saldos de partida.</p></div>${button('Configurar consorcio','nav','primary','configuracion','arrow')}</div>`:'')+
+    `<div class="stats"><div class="stat featured"><div class="stat-top">Cobrado en el mes ${icon('wallet')}</div><strong>${money(received.reduce((n,p)=>n+p.amount,0))}</strong><small>${received.length} pago${received.length!==1?'s':''} registrado${received.length!==1?'s':''}</small></div><div class="stat"><div class="stat-top">Saldo pendiente total ${icon('receipt')}</div><strong>${money(Ledger.outstanding(state))}</strong><small>De todos los períodos cargados</small></div><div class="stat"><div class="stat-top">Unidades con saldo ${icon('building')}</div><strong>${pendingUnits}<span style="font-size:16px;color:var(--muted);font-weight:400"> / ${state.units.length}</span></strong><small>Según las expensas registradas</small></div><div class="stat"><div class="stat-top">Expensas del período ${icon('calendar')}</div><strong>${money(totalCharged)}</strong><small>${periodLabel(ui.month)}</small></div></div>`+
+    `<div class="grid-two"><section class="panel"><div class="panel-header"><div><h2>Estado de las unidades</h2><p>Saldo acumulado de todos los períodos</p></div>${button('Ver unidades','nav','small','unidades')}</div>${state.units.length?`<div class="table-wrap"><table><thead><tr><th>Unidad / responsable</th><th>Estado</th><th class="num">Saldo</th><th></th></tr></thead><tbody>${state.units.map(u=>{const balance=Ledger.outstanding(state,u.id);return `<tr><td><strong>${esc(u.label)}</strong><small>${esc(personName(u.billingPersonId))}</small></td><td><span class="badge ${balance?'warning':'success'}">${balance?'Con saldo':'Sin saldo'}</span></td><td class="num">${money(balance)}</td><td>${button('Ver cuenta','account','small',u.id)}</td></tr>`;}).join('')}</tbody></table></div>`:empty('Todavía no hay unidades','Cargá cada departamento y su responsable para comenzar.','add-unit','Agregar primera unidad','building')}</section>`+
+    `<section class="panel"><div class="panel-header"><h2>${state.config.configured?'Últimos recibos':'Tu puesta en marcha'}</h2></div>${state.config.configured?(state.payments.length?`<div class="panel-body">${state.payments.slice(-4).reverse().map(p=>`<div class="step-row"><div style="flex:1"><h3>${esc(p.payer)}</h3><p>${esc(p.number)} · ${dateLabel(p.date)}</p><p><strong>${money(p.amount)}</strong> ${p.voidedAt?'· Anulado':''}</p></div>${button('Ver','view-receipt','small',p.id)}</div>`).join('')}</div>`:empty('El próximo cobro queda registrado','Al confirmar un pago, su recibo aparecerá acá.')):`<div class="panel-body">${[['Consorcio y numeración','Los datos que van en el recibo.',state.config.lastNumber!==null],['Unidades y personas','Cada departamento con su responsable.',state.units.length>0],['Saldos iniciales','Las deudas anteriores, si las hay.',state.setupStep>=4]].map(([title,text,done],i)=>`<div class="step-row ${done?'done':''}"><span class="step-num">${done?'✓':i+1}</span><div><h3>${title}</h3><p>${text}</p></div></div>`).join('')}</div>`}</section></div>`;
+}
+function peopleOptions(selected,placeholder='Seleccionar persona'){return option('',placeholder,selected)+state.people.map(p=>option(p.id,p.name,selected)).join('');}
+function unitsOptions(selected){return option('','Seleccionar unidad',selected)+state.units.map(u=>option(u.id,u.label,selected)).join('');}
+function unitsTable(){return state.units.length?`<div class="table-wrap"><table><thead><tr><th>Unidad</th><th>Responsable</th><th>Participación</th><th class="num">Saldo pendiente</th><th></th></tr></thead><tbody>${state.units.map(u=>`<tr><td><strong>${esc(u.label)}</strong><small>${esc([u.floor?'Piso '+u.floor:'',u.apartment?'Dpto. '+u.apartment:''].filter(Boolean).join(' · ')||'Sin detalle adicional')}</small></td><td>${esc(personName(u.billingPersonId))}<small>${u.billingPersonId===u.tenantId?'Inquilino/a':u.billingPersonId===u.ownerId?'Propietario/a':'Responsable'}</small></td><td>${u.percentage===null?'—':u.percentage.toLocaleString('es-AR')+' %'}</td><td class="num">${money(Ledger.outstanding(state,u.id))}</td><td><div class="table-actions">${button('Cuenta','account','small',u.id)}${button('Editar','edit-unit','small',u.id)}</div></td></tr>`).join('')}</tbody></table></div>`:empty('Agregá tu primera unidad','Identificá el departamento y vinculalo con la persona responsable.','add-unit','Agregar unidad','building');}
+function unitsView(){return head('Unidades y personas','Los datos de cada departamento y sus responsables.',button(ui.unitTab==='units'?'Agregar unidad':'Agregar persona',ui.unitTab==='units'?'add-unit':'add-person','primary','','plus'))+`<div class="tabs" role="group" aria-label="Tipo de registro"><button data-action="unit-tab" data-id="units" class="${ui.unitTab==='units'?'active':''}">Unidades (${state.units.length})</button><button data-action="unit-tab" data-id="people" class="${ui.unitTab==='people'?'active':''}">Personas (${state.people.length})</button></div><section class="panel">${ui.unitTab==='units'?unitsTable():state.people.length?`<div class="table-wrap"><table><thead><tr><th>Persona</th><th>Contacto</th><th>Unidades vinculadas</th><th></th></tr></thead><tbody>${state.people.map(p=>`<tr><td><div class="person-cell"><span class="initials">${esc(initials(p.name))}</span><div><strong>${esc(p.name)}</strong><small>${p.dni?'DNI '+esc(p.dni):p.cuit?'CUIT '+esc(p.cuit):'Sin documento cargado'}</small></div></div></td><td>${esc(p.phone||'—')}<small>${esc(p.email)}</small></td><td>${esc(state.units.filter(u=>[u.ownerId,u.tenantId,u.billingPersonId].includes(p.id)).map(u=>u.label).join(', ')||'Sin vincular')}</td><td class="num">${button('Editar','edit-person','small',p.id)}</td></tr>`).join('')}</tbody></table></div>`:empty('Las personas de tu consorcio','Podés registrar propietarios e inquilinos y asociarlos a una o varias unidades.','add-person','Agregar persona','people')}</section>`;}
+function configForm(initial=false){
+  const c=Ledger.receiptConfig(state.config),locked=state.payments.length>0;
+  return `<form id="config-form"><div class="form-grid">
+    ${field('Administración','agency',c.agency,'required maxlength="120"')}
+    ${field('Nombre del consorcio','name',c.name,'required maxlength="160"')}
+    <div class="field full">${field('Domicilio del consorcio','address',c.address,'required maxlength="200"')}</div>
+    <h3 class="section-title">Datos del encabezado del recibo</h3>
+    ${field('CUIT del consorcio','cuit',c.cuit,'maxlength="15" placeholder="30-12345678-9"')}
+    ${field('Condición frente al IVA','vat',c.vat,'maxlength="80"')}
+    ${field('Ingresos Brutos','grossIncome',c.grossIncome,'maxlength="80"')}
+    ${field('Establecimiento N°','establishment',c.establishment,'maxlength="80"')}
+    ${field('Sede de timbrado','stampOffice',c.stampOffice,'maxlength="80"')}
+    ${field('Inicio de actividad','startActivity',c.startActivity,'type="date"')}
+    <h3 class="section-title">Firma y pie del recibo</h3>
+    <div class="field full">${field('Nombre para la aclaración de firma','signer',c.signer,'maxlength="120"','Opcional. Se imprime en la línea de aclaración; la firma se realiza a mano.')}</div>
+    <div class="field full">${field('Leyenda de Defensa del Consumidor','consumerNotice',c.consumerNotice,'maxlength="180"','Texto transcripto del talonario. Podés corregirlo o actualizarlo.')}</div>
+    <h3 class="section-title">Numeración de recibos</h3>
+    ${field('Prefijo','prefix',c.prefix,`required pattern="[0-9]{4}" maxlength="4" ${locked?'readonly':''}`,'Cuatro dígitos, como 0001.')}
+    ${field('Último número emitido','lastNumber',c.lastNumber===null?'':c.lastNumber,`required type="number" min="0" max="99999998" step="1" ${locked?'readonly':''}`,locked?'Se actualiza al emitir cada recibo.':'Ingresá el último usado en tu talonario. Usá 0 solo si comenzás una serie nueva.')}
+    <div class="field full"><div class="notice" style="margin:0">${initial?'Los datos del consorcio se completaron a partir de las fotos. Revisalos antes de continuar.':locked?'Los cambios de datos se aplican a los próximos comprobantes. La numeración queda protegida.':'El primer recibo utilizará el número siguiente al indicado.'}</div></div>
+  </div>
+  <div class="form-foot"><div class="actions">${button('Vista previa del recibo','preview-receipt','','','receipt')}<span class="small muted">No registra pagos ni consume un número.</span></div><button class="btn primary" type="submit">${initial?'Guardar y continuar':'Guardar configuración'} ${icon('arrow')}</button></div><div class="form-error" role="alert"></div></form>`;
+}
+function setupProgress(){return `<div class="progress-steps">${['Consorcio','Unidades y personas','Saldos iniciales','Revisión'].map((label,i)=>`<div class="progress-step ${state.setupStep===i+1?'active':state.setupStep>i+1?'complete':''}">${i+1}. ${label}</div>`).join('')}</div>`;}
+function settingsView(){
+  if(state.config.configured)return head('Configuración','Datos del consorcio y del recibo.',button('Vista previa del recibo','preview-receipt','','','receipt'))+`<section class="panel"><div class="panel-header"><h2>Datos generales</h2><span class="badge success">Configurado</span></div><div class="panel-body">${configForm()}</div></section>`;
+  let content='';
+  if(state.setupStep===1)content=`<div class="panel-body">${configForm(true)}</div>`;
+  if(state.setupStep===2)content=`<div class="panel-header"><div><h2>Agregá las unidades del consorcio</h2><p>Podés crear a su responsable al mismo tiempo.</p></div>${button('Agregar unidad','add-unit','primary','','plus')}</div>${unitsTable()}<div class="panel-body"><div class="form-foot">${button('Volver','setup-step','','1')}${button('Continuar con saldos','setup-step','primary','3','arrow')}</div></div>`;
+  if(state.setupStep===3)content=`<div class="panel-header"><div><h2>¿Hay deudas anteriores?</h2><p>Cargá solamente lo pendiente de cada período. Si no hay deudas, continuá.</p></div>${button('Agregar deuda','opening-charge','primary','','plus')}</div>${openingTable()}<div class="panel-body"><div class="notice">Estos importes se suman al saldo de la unidad. No vuelvas a cargarlos como expensas del mismo período.</div><div class="form-foot">${button('Volver','setup-step','','2')}${button('Revisar configuración','setup-step','primary','4','arrow')}</div></div>`;
+  if(state.setupStep===4)content=`<div class="panel-body"><h2>Todo listo para empezar</h2><p class="muted">Revisá el punto de partida de tu consorcio.</p><div class="summary-list"><div class="summary-line"><span>Consorcio</span><strong>${esc(state.config.name)}</strong></div><div class="summary-line"><span>Unidades / personas</span><strong>${state.units.length} / ${state.people.length}</strong></div><div class="summary-line"><span>Saldo inicial pendiente</span><strong>${money(Ledger.outstanding(state))}</strong></div><div class="summary-line"><span>Próximo recibo</span><strong>${esc(state.config.prefix)}-${String((state.config.lastNumber??0)+1).padStart(8,'0')}</strong></div></div><form id="finish-setup"><label class="check" style="margin-top:25px"><input type="checkbox" name="reviewed" required>Revisé los datos y la numeración inicial.</label><div class="form-foot">${button('Volver','setup-step','','3')}<button class="btn primary" type="submit">Finalizar configuración ${icon('check')}</button></div><div class="form-error" role="alert"></div></form></div>`;
+  return head('Configurá tu consorcio','Una sola vez. Después, todo queda listo para la gestión mensual.',button('Vista previa del recibo','preview-receipt','','','receipt'))+setupProgress()+`<section class="panel">${content}</section>`;
+}
+function openingTable(){const list=state.charges.filter(c=>c.kind==='opening');return list.length?`<div class="table-wrap"><table><thead><tr><th>Unidad</th><th>Período adeudado</th><th class="num">Importe</th><th></th></tr></thead><tbody>${list.map(c=>`<tr><td>${esc(unitName(c.unitId))}</td><td>${periodLabel(c.period)}</td><td class="num">${money(c.amount)}</td><td class="num">${button('Corregir','edit-charge','small',c.id)}</td></tr>`).join('')}</tbody></table></div>`:empty('Sin deudas iniciales cargadas','Si todas las unidades están al día, podés pasar a la revisión.','','','check');}
+function chargesView(){
+  if(!state.units.length)return head('Expensas','Cargá el importe que le corresponde a cada unidad.')+`<section class="panel">${empty('Primero, agregá las unidades','Las expensas se registran en la cuenta de cada departamento.','add-unit','Agregar unidad','building')}</section>`;
+  const charged=state.charges.filter(c=>c.period===ui.month);
+  return head('Expensas del mes','Ingresá los importes ya calculados para cada unidad.',`<div class="toolbar">${button('Cargar deuda anterior','opening-charge')}<input type="month" id="charges-month" aria-label="Período de expensas" value="${ui.month}"></div>`)+
+    `<section class="panel"><div class="panel-header"><div><h2>${periodLabel(ui.month).replace(/^./,s=>s.toUpperCase())}</h2><p>Los importes se cargan manualmente; el porcentaje es informativo.</p></div><span class="badge blue">${charged.length} de ${state.units.length} unidades</span></div><form id="monthly-form"><div class="table-wrap"><table><thead><tr><th>Unidad / responsable</th><th>Participación</th><th class="num">Importe del período</th><th class="num">Pendiente</th><th>Estado</th></tr></thead><tbody>${state.units.map(u=>{const c=charged.find(c=>c.unitId===u.id);return `<tr><td><strong>${esc(u.label)}</strong><small>${esc(personName(u.billingPersonId))}</small></td><td>${u.percentage===null?'—':u.percentage.toLocaleString('es-AR')+' %'}</td><td class="num">${c?`<strong>${money(c.amount)}</strong>`:`<input class="amount-input" name="amount:${esc(u.id)}" inputmode="decimal" placeholder="0,00" aria-label="Importe de ${esc(u.label)}">`}</td><td class="num">${c?money(Ledger.remaining(state,c)):'—'}</td><td>${c?`<span class="badge ${Ledger.remaining(state,c)?'blue':'success'}">${c.kind==='opening'?'Saldo inicial':Ledger.remaining(state,c)?'Cargado':'Pagado'}</span> ${button('Corregir','edit-charge','small',c.id)}`:'<span class="badge">Sin cargar</span>'}</td></tr>`;}).join('')}</tbody></table></div><div class="panel-body"><div class="form-foot" style="margin-top:0;padding-top:0;border:0"><span class="small muted">Total cargado: <strong>${money(charged.reduce((n,c)=>n+c.amount,0))}</strong></span><button class="btn primary" type="submit"${charged.length===state.units.length?' disabled':''}>Guardar importes</button></div><div class="form-error" role="alert"></div></div></form></section><div class="callout">Cargar expensas genera un saldo pendiente. El cobro se registra por separado cuando recibís el dinero.</div>`;
+}
+function paymentView(){
+  if(!state.config.configured)return head('Registrar pago','Confirmá un cobro y generá su recibo.')+`<section class="panel">${empty('Completá la configuración inicial','Necesitamos las unidades y el último número del talonario antes de emitir el primer recibo.','nav','Ir a configuración')}</section>` .replace('data-action="nav"','data-action="nav" data-id="configuracion"');
+  if(!Ledger.debts(state).length)return head('Registrar pago','Confirmá un cobro y generá su recibo.')+`<section class="panel">${empty('No hay saldos pendientes','Cargá las expensas del período para poder aplicar un pago.','nav','Cargar expensas')}</section>`.replace('data-action="nav"','data-action="nav" data-id="expensas"');
+  return head('Registrar pago','Completá el cobro recibido. Vas a poder revisarlo antes de emitir.')+`<div class="grid-two"><section class="panel"><div class="panel-header"><h2>Datos del pago</h2><span class="badge blue">Nuevo recibo</span></div><div class="panel-body"><form id="payment-form"><div class="form-grid"><div class="field full"><label for="pay-unit">Unidad</label><select id="pay-unit" name="unitId" required>${unitsOptions(ui.payUnit||'')}</select></div><div class="field full"><label for="pay-payer">Recibí de</label><input id="pay-payer" name="payer" required maxlength="120" placeholder="Nombre de quien realiza el pago"><small>Podés indicar otra persona si quien paga no es el responsable habitual.</small></div>${field('Fecha de pago','pay-date',Ledger.today(),`type="date" required max="${Ledger.today()}"`)}<div class="field"><label for="pay-method">Medio de pago</label><select id="pay-method" name="method">${['Efectivo','Transferencia','Cheque','Otro'].map(m=>option(m,m,'')).join('')}</select></div><div class="field full"><label>Períodos a cancelar</label><div id="payment-debts"><p class="small muted">Seleccioná una unidad.</p></div></div><div class="field full"><label for="pay-amount">Importe recibido</label><input id="pay-amount" name="amount" inputmode="decimal" required placeholder="Ej.: 218.360,00"><small>Podés registrar un pago parcial. Se aplica primero al período seleccionado más antiguo.</small></div><div class="field full"><label for="pay-note">Observación <span class="muted">(opcional)</span></label><textarea id="pay-note" name="note" maxlength="240" placeholder="Referencia de transferencia u otra aclaración"></textarea></div></div><div class="form-foot"><span class="small muted">Todavía no se registró ningún cobro.</span><button type="submit" class="btn primary">Revisar pago ${icon('arrow')}</button></div><div class="form-error" role="alert"></div></form></div></section><section class="panel"><div class="panel-header"><h2>Resumen del cobro</h2></div><div class="panel-body" id="payment-summary"><p class="muted">Elegí una unidad para ver el saldo.</p></div></section></div>`;
+}
+function receiptsRows(){let list=state.payments.slice().reverse().filter(p=>ui.receiptStatus==='all'||(ui.receiptStatus==='void'?!!p.voidedAt:!p.voidedAt));const term=ui.receiptSearch.toLocaleLowerCase('es');if(term)list=list.filter(p=>[p.number,p.payer,p.snapshot.unit.label].join(' ').toLocaleLowerCase('es').includes(term));return list.length?`<div class="table-wrap"><table><thead><tr><th>Número / fecha</th><th>Persona / unidad</th><th>Medio de pago</th><th class="num">Importe</th><th>Estado</th><th></th></tr></thead><tbody>${list.map(p=>`<tr><td><strong class="mono">${esc(p.number)}</strong><small>${dateLabel(p.date)}</small></td><td>${esc(p.payer)}<small>${esc(p.snapshot.unit.label)}</small></td><td>${esc(p.method)}</td><td class="num">${money(p.amount)}</td><td><span class="badge ${p.voidedAt?'danger':'success'}">${p.voidedAt?'Anulado':'Emitido'}</span></td><td class="num">${button('Ver recibo','view-receipt','small',p.id)}</td></tr>`).join('')}</tbody></table></div>`:empty(state.payments.length?'No hay coincidencias':'Tu historial de recibos','Los comprobantes emitidos aparecen acá para consultarlos y volver a imprimirlos.');}
+function receiptsView(){return head('Recibos','Original y duplicado, siempre con el mismo número.',button('Registrar pago','nav','primary','pagos','plus'))+`<section class="panel"><div class="panel-header"><div class="toolbar"><input type="search" class="search-input" id="receipt-search" aria-label="Buscar recibos" placeholder="Buscar número, persona o unidad" value="${esc(ui.receiptSearch)}"><select id="receipt-status" aria-label="Estado de recibo">${[['all','Todos los estados'],['active','Emitidos'],['void','Anulados']].map(([v,l])=>option(v,l,ui.receiptStatus)).join('')}</select></div><span class="badge">${state.payments.length} comprobantes</span></div><div id="receipt-list">${receiptsRows()}</div></section>`;}
+function backupsView(){return head('Respaldos','Guardá una copia de tus registros y recuperala cuando la necesites.')+`<div class="grid-two"><section class="panel"><div class="panel-header"><h2>Copia de seguridad</h2></div><div class="panel-body"><p>Descargá un archivo con el consorcio, las personas, las unidades, las expensas y todos los recibos.</p><div class="summary-list"><div class="summary-line"><span>Unidades</span><strong>${state.units.length}</strong></div><div class="summary-line"><span>Personas</span><strong>${state.people.length}</strong></div><div class="summary-line"><span>Recibos, incluidos anulados</span><strong>${state.payments.length}</strong></div></div><div class="actions" style="margin-top:24px">${button('Descargar respaldo','export','primary','','download')}</div></div></section><section class="panel"><div class="panel-header"><h2>Recuperar un respaldo</h2></div><div class="panel-body"><p>Elegí un respaldo generado por esta aplicación. Podrás revisar sus datos antes de reemplazar los actuales.</p><label for="backup-file" class="label">Archivo de respaldo (.json)</label><input type="file" id="backup-file" accept=".json,application/json" style="margin-top:10px"></div></section></div><div class="notice warning">Esta versión guarda los datos en este navegador y esta computadora. Si borrás los datos del navegador o cambiás de equipo, necesitás un respaldo para recuperarlos. Usá una sola copia de trabajo y descargá un respaldo después de cada jornada de cobros.</div>`;}
+function openModal(title,body,handler=null,wide=false){const dialog=$('#dialog');if(dialog.open)dialog.close();dialog.className=wide?'receipt-dialog':'';dialog.innerHTML=`<div class="dialog-head"><h2 id="dialog-title">${title}</h2><button type="button" class="close" data-action="close-modal" aria-label="Cerrar">×</button></div>${body}`;modalHandler=handler;dialog.showModal();}
+function closeModal(){const d=$('#dialog');if(d.open)d.close();modalHandler=null;$('#print-root').innerHTML='';document.body.classList.remove('printing');}
+function openPerson(personId=''){
+  const p=state.people.find(p=>p.id===personId)||{name:'',dni:'',cuit:'',phone:'',email:'',address:'',vat:''};
+  openModal(personId?'Editar persona':'Agregar persona',`<form id="modal-form" class="dialog-body"><div class="form-grid"><div class="field full">${field('Nombre y apellido','person-name',p.name,'required maxlength="120" autocomplete="name"')}</div>${field('DNI','person-dni',p.dni,'maxlength="20"')}${field('CUIT / CUIL','person-cuit',p.cuit,'maxlength="20"')}${field('Teléfono','person-phone',p.phone,'maxlength="40" type="tel"')}${field('Correo electrónico','person-email',p.email,'maxlength="160" type="email"')}<div class="field full">${field('Domicilio','person-address',p.address,'maxlength="200"')}</div><div class="field full">${field('Condición frente al IVA','person-vat',p.vat,'maxlength="80"','Opcional. Se incluye en el recibo si está informado.')}</div></div><div class="form-foot">${button('Cancelar','close-modal')}<button class="btn primary" type="submit">Guardar persona</button></div><div class="form-error" role="alert"></div></form>`,async fd=>{
+    const person={id:personId||Ledger.id()};for(const k of ['name','dni','cuit','phone','email','address','vat'])person[k]=String(fd.get('person-'+k)||'').trim();
+    await commit(s=>{Ledger.require(person.name.length>1,'Ingresá el nombre completo.');if(personId){const index=s.people.findIndex(p=>p.id===personId);Ledger.require(index>=0,'La persona ya no existe.');s.people[index]=person;}else s.people.push(person);});closeModal();render();toast('Persona guardada.');
+  });
+}
+function openUnit(unitId=''){
+  const u=state.units.find(u=>u.id===unitId)||{label:'',floor:'',apartment:'',percentage:null,ownerId:'',tenantId:'',billingPersonId:''};
+  openModal(unitId?'Editar unidad':'Agregar unidad',`<form id="modal-form" class="dialog-body"><div class="form-grid"><div class="field full">${field('Identificación de la unidad','unit-label',u.label,'required maxlength="60" placeholder="Ej.: Unidad 5 · Departamento 11"')}</div>${field('Piso','unit-floor',u.floor,'maxlength="30"')}${field('Departamento','unit-apartment',u.apartment,'maxlength="30"')}${field('Porcentaje de participación','unit-percentage',u.percentage??'','type="number" min="0" max="100" step="0.001" placeholder="Ej.: 8,47"','Opcional. No calcula el importe automáticamente.')}<div class="field"><label for="unit-billing">Responsable de pago</label><select id="unit-billing" name="billingPersonId">${peopleOptions(u.billingPersonId,'Crear una persona nueva')}</select></div><div class="field full" id="new-person-fields"><label for="unit-person-name">Nombre de la persona nueva</label><input id="unit-person-name" name="newName" maxlength="120" placeholder="Nombre y apellido"><small>Luego podés completar su teléfono, documento y domicilio desde Personas.</small></div><div class="field" id="new-role-field"><label for="unit-role">La persona nueva es</label><select id="unit-role" name="newRole"><option value="owner">Propietario/a</option><option value="tenant">Inquilino/a</option><option value="other">Otro responsable</option></select></div><h3 class="section-title">Vínculos adicionales (opcionales)</h3><div class="field"><label for="unit-owner">Propietario/a existente</label><select id="unit-owner" name="ownerId">${peopleOptions(u.ownerId,'Sin asignar')}</select></div><div class="field"><label for="unit-tenant">Inquilino/a existente</label><select id="unit-tenant" name="tenantId">${peopleOptions(u.tenantId,'Sin asignar')}</select></div></div><div class="form-foot">${button('Cancelar','close-modal')}<button class="btn primary" type="submit">Guardar unidad</button></div><div class="form-error" role="alert"></div></form>`,async fd=>{
+    const unit={id:unitId||Ledger.id(),label:String(fd.get('unit-label')).trim(),floor:String(fd.get('unit-floor')).trim(),apartment:String(fd.get('unit-apartment')).trim(),percentage:fd.get('unit-percentage')===''?null:Number(fd.get('unit-percentage')),billingPersonId:String(fd.get('billingPersonId')||''),ownerId:String(fd.get('ownerId')||''),tenantId:String(fd.get('tenantId')||'')};
+    await commit(s=>{Ledger.require(!s.units.some(x=>x.id!==unit.id&&x.label.toLowerCase()===unit.label.toLowerCase()),'Ya hay una unidad con esa identificación.');if(!unit.billingPersonId){const name=String(fd.get('newName')||'').trim();Ledger.require(name.length>1,'Elegí una persona o escribí el nombre del nuevo responsable.');const pid=Ledger.id();s.people.push({id:pid,name,dni:'',cuit:'',phone:'',email:'',address:'',vat:''});unit.billingPersonId=pid;if(fd.get('newRole')==='owner')unit.ownerId=pid;if(fd.get('newRole')==='tenant')unit.tenantId=pid;}if(unitId){const index=s.units.findIndex(x=>x.id===unitId);Ledger.require(index>=0,'La unidad ya no existe.');s.units[index]=unit;}else s.units.push(unit);});closeModal();render();toast('Unidad guardada.');
+  });toggleNewPerson();
+}
+function toggleNewPerson(){const create=!$('#unit-billing').value;$('#new-person-fields').classList.toggle('hidden',!create);$('#new-role-field').classList.toggle('hidden',!create);$('#unit-person-name').required=create;}
+function openCharge(chargeId=''){
+  if(!state.units.length){toast('Primero agregá una unidad.');return;}
+  const c=state.charges.find(c=>c.id===chargeId);
+  if(c&&state.payments.some(p=>p.allocations.some(a=>a.chargeId===c.id))){toast('Esta expensa tiene recibos asociados y su importe está protegido.');return;}
+  openModal(c?'Corregir importe':'Cargar deuda anterior',`<form id="modal-form" class="dialog-body"><div class="form-grid"><div class="field full"><label for="charge-unit">Unidad</label><select id="charge-unit" name="unitId" required${c?' disabled':''}>${unitsOptions(c?.unitId||'')}</select></div>${field('Período adeudado','charge-period',c?.period||ui.month,`type="month" required ${c?'readonly':''}`)}${field('Importe pendiente','charge-amount',c?moneyInput(c.amount):'','required inputmode="decimal" placeholder="0,00"')}</div><div class="notice" style="margin-top:20px">${c?'Podés corregir el importe mientras no tenga recibos asociados.':'Cargá el saldo que queda por pagar, sin incluir importes ya cobrados.'}</div><div class="form-foot">${button('Cancelar','close-modal')}<button class="btn primary" type="submit">Guardar importe</button></div><div class="form-error" role="alert"></div></form>`,async fd=>{
+    const amount=Ledger.cents(fd.get('charge-amount'));
+    await commit(s=>{if(c){const current=s.charges.find(x=>x.id===c.id);Ledger.require(current&&!s.payments.some(p=>p.allocations.some(a=>a.chargeId===c.id)),'No se puede modificar una expensa con recibos asociados.');current.amount=amount;}else Ledger.addCharge(s,{unitId:String(fd.get('unitId')),period:String(fd.get('charge-period')),amount,kind:'opening'});});closeModal();render();toast('Importe guardado.');
+  });
+}
+function openAccount(unitId){const u=state.units.find(u=>u.id===unitId);if(!u)return;const list=state.charges.filter(c=>c.unitId===unitId).sort((a,b)=>b.period.localeCompare(a.period));openModal(esc(u.label),`<div class="dialog-body"><p class="muted">Responsable actual: ${esc(personName(u.billingPersonId))}</p><div class="balance-box"><span class="small muted">Saldo pendiente total</span><div class="amount-large">${money(Ledger.outstanding(state,unitId))}</div></div>${list.length?`<div class="table-wrap"><table><thead><tr><th>Período</th><th class="num">Cargado</th><th class="num">Pagado</th><th class="num">Saldo</th></tr></thead><tbody>${list.map(c=>`<tr><td>${periodLabel(c.period)}${c.kind==='opening'?'<small>Saldo inicial</small>':''}</td><td class="num">${money(c.amount)}</td><td class="num">${money(Ledger.paid(state,c.id))}</td><td class="num">${money(Ledger.remaining(state,c))}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Todavía no hay expensas cargadas para esta unidad.</p>'}<h3 style="margin-top:24px">Pagos registrados</h3>${state.payments.filter(p=>p.unitId===unitId).slice().reverse().map(p=>`<div class="summary-line"><span>${dateLabel(p.date)} · ${esc(p.number)}${p.voidedAt?' · Anulado':''}</span><strong>${money(p.amount)} ${button('Ver','view-receipt','small',p.id)}</strong></div>`).join('')||'<p class="small muted">Sin pagos.</p>'}<div class="form-foot">${button('Cerrar','close-modal')}${Ledger.outstanding(state,unitId)>0?button('Registrar pago','pay-unit','primary',unitId):''}</div></div>`,null,true);}
+function updatePaymentSelection(){
+  const select=$('#pay-unit');if(!select)return;const unit=state.units.find(u=>u.id===select.value);ui.payUnit=select.value;
+  $('#pay-payer').value=unit?personName(unit.billingPersonId):'';
+  const list=unit?Ledger.debts(state,unit.id):[];
+  $('#payment-debts').innerHTML=list.length?`<div class="allocation-list">${list.map(c=>`<div class="allocation"><label class="check"><input type="checkbox" name="chargeIds" value="${esc(c.id)}" checked>${periodLabel(c.period)} ${c.kind==='opening'?'<span class="badge">Inicial</span>':''}</label><strong>${money(Ledger.remaining(state,c))}</strong></div>`).join('')}</div>`:`<p class="small muted">${unit?'Esta unidad no tiene saldo pendiente.':'Seleccioná una unidad.'}</p>`;
+  $('#pay-amount').value=list.length?moneyInput(list.reduce((n,c)=>n+Ledger.remaining(state,c),0)):'';updatePaymentSummary();
+}
+function selectedPayDebts(){return [...document.querySelectorAll('#payment-debts input:checked')].map(el=>state.charges.find(c=>c.id===el.value)).filter(Boolean);}
+function updatePaymentSummary(){
+  const unit=state.units.find(u=>u.id===$('#pay-unit')?.value);if(!unit){$('#payment-summary').innerHTML='<p class="muted">Elegí una unidad para ver el saldo.</p>';return;}
+  const selected=selectedPayDebts(), selectedTotal=selected.reduce((n,c)=>n+Ledger.remaining(state,c),0);let amount=0;try{amount=Ledger.cents($('#pay-amount').value,true);}catch(_){}
+  $('#payment-summary').innerHTML=`<h3>${esc(unit.label)}</h3><p class="small muted">${esc(personName(unit.billingPersonId))}</p><div class="summary-list"><div class="summary-line"><span>Saldo total</span><strong>${money(Ledger.outstanding(state,unit.id))}</strong></div><div class="summary-line"><span>Períodos seleccionados</span><strong>${selected.length}</strong></div><div class="summary-line"><span>Saldo seleccionado</span><strong>${money(selectedTotal)}</strong></div></div><div class="balance-box"><div class="small muted">Importe a registrar</div><div class="amount-large">${money(amount)}</div></div>${amount>selectedTotal?'<div class="notice error">El importe supera el saldo seleccionado.</div>':`<p class="small muted">Saldo de la unidad después del pago: <strong>${money(Ledger.outstanding(state,unit.id)-amount)}</strong></p>`}<div class="callout">Se emitirán original y duplicado con un único número. Imprimir nuevamente no registra otro cobro.</div>`;
+}
+function paymentData(fd){const unit=state.units.find(u=>u.id===fd.get('unitId'));const payer=String(fd.get('payer')||'').trim();const p=unit?state.people.find(p=>p.id===unit.billingPersonId):null;return {unitId:String(fd.get('unitId')),payerId:p?.name===payer?p.id:'',payer,date:String(fd.get('pay-date')),method:String(fd.get('method')),note:String(fd.get('note')||''),amount:Ledger.cents(fd.get('amount')),chargeIds:fd.getAll('chargeIds')};}
+function reviewPayment(data){
+  const preview=Ledger.issue(JSON.parse(JSON.stringify(state)),data);
+  openModal('Revisar y confirmar el cobro',`<form id="modal-form" class="dialog-body"><span class="badge blue">Todavía sin emitir</span><div class="summary-list" style="margin-top:15px"><div class="summary-line"><span>Unidad</span><strong>${esc(preview.snapshot.unit.label)}</strong></div><div class="summary-line"><span>Recibí de</span><strong>${esc(preview.payer)}</strong></div><div class="summary-line"><span>Fecha / medio</span><strong>${dateLabel(preview.date)} · ${esc(preview.method)}</strong></div><div class="summary-line"><span>Próximo número</span><strong>${esc(preview.number)}</strong></div></div><div class="balance-box"><span class="small muted">Pago recibido</span><div class="amount-large">${money(preview.amount)}</div><p class="small muted" style="margin:7px 0 0">${Ledger.words(preview.amount)}</p></div><h3>Aplicación del pago</h3>${preview.allocations.map(a=>`<div class="summary-line"><span>${periodLabel(a.period)}</span><strong>${money(a.amount)}</strong></div>`).join('')}<p class="small muted" style="margin-top:18px">Saldo pendiente de la unidad después del pago: ${money(preview.snapshot.balanceAfter)}.</p><label class="check"><input type="checkbox" required>Confirmo que recibí este pago.</label><div class="form-foot">${button('Volver a editar','close-modal')}<button type="submit" class="btn primary">Confirmar y emitir recibo</button></div><div class="form-error" role="alert"></div></form>`,async()=>{const p=await commit(s=>Ledger.issue(s,data));closeModal();navigate('recibos');showReceipt(p.id);toast('Pago guardado y recibo '+p.number+' emitido.');});
+}
+function receiptCopy(p,copy,allocations,page,pages){
+  const c=Ledger.receiptConfig(p.snapshot.config),u=p.snapshot.unit,person=p.snapshot.payer;
+  const building=c.name.replace(/^consorcio\s+de\s+propietarios\s*/i,'')||c.name;
+  const [year,month,day]=p.date.split('-');
+  const taxRows=[['CUIT N°',c.cuit],['Ingr. Brutos',c.grossIncome],['Establ. N°',c.establishment],['Sede Timbrado',c.stampOffice],['Inicio de actividad',c.startActivity?dateLabel(c.startActivity):'']];
+  return `<article class="receipt">
+    <div class="r-copybar"><span class="r-copytag">${copy}</span><span class="r-agency">Administración · ${esc(c.agency)}</span></div>
+    ${p.demo?'<div class="r-preview">MODELO DE MUESTRA · NO ACREDITA UN PAGO</div>':''}
+    ${p.voidedAt?'<div class="r-annulled">ANULADO · SIN EFECTO COMO CONSTANCIA DE PAGO</div>':''}
+    <div class="r-header">
+      <div class="r-issuer"><div><div class="r-issuer-label">Consorcio de propietarios</div><div class="r-building">${esc(building)}</div><div class="r-address">${esc(c.address)}</div></div><div class="r-issuer-bottom">${esc(c.vat)}</div></div>
+      <div class="r-x">X</div>
+      <div class="r-identification"><div class="r-heading">RECIBO</div><div class="r-number"><span>N°</span>${esc(p.number)}</div>
+        <div class="r-date"><span class="r-date-label">FECHA</span><div class="r-date-boxes" aria-label="${dateLabel(p.date)}"><span>${esc(day)}</span><span>${esc(month)}</span><span>${esc(year)}</span></div></div>
+        <dl class="r-tax">${taxRows.map(([label,value])=>`<dt>${label}:</dt><dd>${esc(value||'—')}</dd>`).join('')}</dl>
+      </div>
+    </div>
+    <div class="r-recipient"><div class="r-line"><span class="r-label">Sr./es:</span><span class="r-fill">${esc(p.payer)}</span></div><div class="r-line"><span class="r-label">Domicilio:</span><span class="r-fill">${esc(person.address||c.address)}</span></div>${person.dni||person.cuit||person.vat?`<div class="r-recipient-meta">${person.dni?`<span><strong>DNI:</strong> ${esc(person.dni)}</span>`:''}${person.cuit?`<span><strong>CUIT / CUIL:</strong> ${esc(person.cuit)}</span>`:''}${person.vat?`<span><strong>IVA:</strong> ${esc(person.vat)}</span>`:''}</div>`:''}</div>
+    <div class="r-content">
+      <div class="r-words"><span class="r-caption">Recibí la suma de pesos</span><div class="r-words-value">${esc(Ledger.words(p.amount))}.</div></div>
+      <div class="r-unit"><div class="r-line"><span class="r-label">Unidad:</span><span class="r-fill">${esc(u.label)}</span></div><div class="r-line"><span class="r-label">Porcentaje:</span><span class="r-fill">${u.percentage===null?'—':Number(u.percentage).toLocaleString('es-AR')+' %'}</span></div></div>
+      <div class="r-concept">En concepto de pago de expensas comunes correspondientes a:</div>
+      <table class="r-periods"><thead><tr><th>Período${pages>1?' · detalle '+page+' de '+pages:''}</th><th class="num">Importe aplicado</th></tr></thead><tbody>${allocations.map(a=>`<tr><td>${periodLabel(a.period)}${a.kind==='opening'?' · saldo anterior':''}</td><td class="num">${money(a.amount)}</td></tr>`).join('')}</tbody></table>
+      <div class="r-method"><strong>Medio de pago:</strong> ${esc(p.method)}</div>
+      ${p.note?`<div class="r-note"><strong>Observaciones:</strong> ${esc(p.note)}</div>`:''}
+      <p class="r-disclaimer">El pago del presente no exime de deudas anteriores.</p>
+    </div>
+    <div class="r-closing"><div class="r-total"><span class="r-caption">Total recibido${pages>1?' · recibo completo':''}</span><strong class="r-total-value">${money(p.amount)}</strong></div><div class="r-signature"><div class="r-signline"><span>Firma:</span><span></span></div><div class="r-signline"><span>Aclaración:</span><span>${esc(c.signer)}</span></div></div></div>
+    ${c.consumerNotice?`<div class="r-consumer">${esc(c.consumerNotice)}</div>`:''}
+    ${pages>1?'<div class="r-continuation">El detalle continúa en las otras hojas de este mismo recibo. El total no se suma por hoja.</div>':''}
+    <div class="r-footer"><span>${copy==='ORIGINAL'?'Ejemplar para quien realiza el pago':'Ejemplar para la administración'}</span><span>${pages>1?'Hoja '+page+' de '+pages:'Expensas comunes'}</span></div>
+  </article>`;
+}
+function receiptChunks(p){
+  const c=Ledger.receiptConfig(p.snapshot.config);
+  const longHeader=['name','address','grossIncome','establishment','stampOffice'].reduce((n,k)=>n+String(c[k]||'').length,0)>300;
+  const perPage=p.voidedAt||longHeader||(p.note||'').length>160?2:3;
+  const chunks=[];for(let i=0;i<p.allocations.length;i+=perPage)chunks.push(p.allocations.slice(i,i+perPage));return chunks;
+}
+function receiptPages(p){const chunks=receiptChunks(p);return chunks.map((alloc,i)=>`<section class="print-pair">${receiptCopy(p,'ORIGINAL',alloc,i+1,chunks.length)}<div class="cut-line">Línea de corte</div>${receiptCopy(p,'DUPLICADO',alloc,i+1,chunks.length)}</section>`).join('');}
+function showReceipt(paymentId){
+  const p=state.payments.find(p=>p.id===paymentId);if(!p)return;
+  openModal('Recibo '+esc(p.number),`<div class="receipt-tools"><div class="actions"><span class="badge ${p.voidedAt?'danger':'success'}">${p.voidedAt?'Anulado':'Emitido'}</span><span class="small muted">${receiptChunks(p).length>1?'Detalle distribuido en varias hojas A4':'Original y duplicado · A4'}</span></div><div class="actions">${!p.voidedAt?button('Anular','annul','danger small',p.id):''}${button('Imprimir original y duplicado','print','primary',p.id,'print')}</div></div>${p.voidedAt?`<div class="notice error" style="margin:16px 24px">Motivo de anulación: ${esc(p.voidReason)}</div>`:''}<div class="paper">${receiptPages(p)}</div>`,null,true);
+}
+function sampleReceipt(config=state.config){
+  const c=Ledger.receiptConfig({...config});
+  return {id:'design-preview',demo:true,number:(c.prefix||'0001')+'-XXXXXXXX',date:Ledger.today(),payer:'Nombre y apellido del pagador',amount:21836000,method:'Transferencia',note:'',voidedAt:null,snapshot:{config:c,unit:{label:'Unidad 5 · Departamento 11',percentage:8.47},payer:{name:'Nombre y apellido del pagador',address:c.address,dni:'',cuit:'',vat:''},balanceAfter:0},allocations:[{chargeId:'sample',period:Ledger.today().slice(0,7),kind:'monthly',amount:21836000}]};
+}
+function showReceiptPreview(){
+  const c={...state.config};const form=$('#config-form');
+  if(form){const fd=new FormData(form);for(const k of ['agency','name','address','cuit','vat','grossIncome','establishment','stampOffice','consumerNotice','startActivity','signer','prefix'])if(fd.has(k))c[k]=String(fd.get(k)||'').trim();}
+  ui.receiptPreview=sampleReceipt(c);
+  openModal('Vista previa del recibo',`<div class="receipt-tools"><div><span class="badge blue">Modelo de muestra</span><p class="small muted" style="margin:8px 0 0">Datos de ejemplo. No registra un pago ni consume un número.</p></div>${button('Imprimir prueba','print-preview','primary','','print')}</div><div class="paper">${receiptPages(ui.receiptPreview)}</div>`,null,true);
+}
+function printReceipt(p){$('#print-root').innerHTML=receiptPages(p);document.body.classList.add('printing');window.print();}
+function askAnnul(paymentId){const p=state.payments.find(p=>p.id===paymentId);if(!p||p.voidedAt)return;openModal('Anular recibo '+esc(p.number),`<form id="modal-form" class="dialog-body"><div class="notice warning">Se descontarán ${money(p.amount)} de lo cobrado y el importe volverá al saldo pendiente de ${esc(p.snapshot.unit.label)}. El recibo quedará guardado como anulado y su número no se reutilizará.</div><div class="field"><label for="void-reason">Motivo de anulación</label><textarea id="void-reason" name="reason" required minlength="5" maxlength="240" placeholder="Explicá el motivo de la corrección"></textarea></div><div class="form-foot">${button('Cancelar','view-receipt','',p.id)}<button class="btn danger" type="submit">Confirmar anulación</button></div><div class="form-error" role="alert"></div></form>`,async fd=>{await commit(s=>Ledger.annul(s,paymentId,String(fd.get('reason'))));closeModal();render();showReceipt(paymentId);toast('Recibo anulado. El saldo de la unidad fue actualizado.');});}
+function downloadData(value,name){const blob=new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function exportBackup(){const time=new Date().toISOString().slice(11,19).replaceAll(':','');downloadData({app:'scaffidi-expensas',exportedAt:new Date().toISOString(),data:state},`scaffidi-respaldo-${Ledger.today()}-${time}.json`);toast('Respaldo preparado para descargar.');}
+async function importBackup(file){
+  try{Ledger.require(file&&file.size<=10000000,'Elegí un respaldo de hasta 10 MB.');const parsed=JSON.parse(await file.text());Ledger.require(parsed.app==='scaffidi-expensas','El archivo no es un respaldo de Scaffidi Propiedades.');const incoming=Ledger.validate(parsed.data);
+    const conflicts=state.payments.filter(p=>{const candidate=incoming.payments.find(x=>x.number===p.number);return !candidate||JSON.stringify(candidate)!==JSON.stringify(p);});
+    Ledger.require(conflicts.length===0,'Este respaldo omite o cambia recibos ya registrados en esta computadora. Recuperalo en otro navegador vacío para no perder ni reutilizar numeración.');
+    if(state.payments.length)Ledger.require(incoming.config.prefix===state.config.prefix&&incoming.config.lastNumber>=state.config.lastNumber,'El respaldo retrocede la numeración actual.');
+    openModal('Revisar respaldo',`<form id="modal-form" class="dialog-body"><p>Se recuperarán los registros de <strong>${esc(incoming.config.name)}</strong>.</p><div class="summary-list"><div class="summary-line"><span>Unidades / personas</span><strong>${incoming.units.length} / ${incoming.people.length}</strong></div><div class="summary-line"><span>Recibos</span><strong>${incoming.payments.length}</strong></div><div class="summary-line"><span>Saldo pendiente</span><strong>${money(Ledger.outstanding(incoming))}</strong></div></div><div class="notice warning" style="margin-top:20px">El respaldo reemplazará los datos de este navegador. Descargá antes una copia de los datos actuales.</div>${button('Descargar datos actuales','export')}<label class="check" style="margin-top:20px"><input type="checkbox" required>Quiero reemplazar los datos con este respaldo.</label><div class="form-foot">${button('Cancelar','close-modal')}<button class="btn primary" type="submit">Restaurar respaldo</button></div><div class="form-error" role="alert"></div></form>`,async()=>{await commit(s=>{s.config=Ledger.receiptConfig(incoming.config);s.setupStep=incoming.setupStep;s.people=incoming.people;s.units=incoming.units;s.charges=incoming.charges;s.payments=incoming.payments;});closeModal();navigate('resumen');toast('Respaldo restaurado.');});
+  }catch(error){toast(error.message);}
+  const input=$('#backup-file');if(input)input.value='';
+}
+async function submitForm(form,operation){if(form.dataset.busy)return;form.dataset.busy='true';const submit=form.querySelector('button[type="submit"]');const errorBox=form.querySelector('.form-error');if(submit)submit.disabled=true;if(errorBox)errorBox.innerHTML='';try{await operation(new FormData(form));}catch(error){if(errorBox)errorBox.innerHTML=`<div class="notice error" style="margin:18px 0 0">${esc(error.message)}</div>`;else toast(error.message);}finally{delete form.dataset.busy;if(submit)submit.disabled=false;}}
+document.addEventListener('submit',event=>{
+  const form=event.target;if(!(form instanceof HTMLFormElement))return;event.preventDefault();
+  const handlers={
+    'modal-form':fd=>modalHandler?.(fd),
+    'config-form':async fd=>{const config={...state.config};for(const k of ['agency','name','address','cuit','vat','grossIncome','establishment','stampOffice','consumerNotice','startActivity','signer','prefix'])config[k]=String(fd.get(k)||'').trim();const n=String(fd.get('lastNumber'));Ledger.require(/^\d+$/.test(n),'Ingresá el último número emitido.');config.lastNumber=Number(n);await commit(s=>{if(s.payments.length)Ledger.require(config.prefix===s.config.prefix&&config.lastNumber===s.config.lastNumber,'No se puede cambiar la numeración después de emitir recibos.');s.config=config;if(!s.config.configured)s.setupStep=2;});render();toast('Datos del consorcio guardados.');},
+    'finish-setup':async fd=>{Ledger.require(fd.get('reviewed'),'Revisá los datos antes de finalizar.');await commit(s=>{Ledger.require(s.units.length&&s.config.lastNumber!==null,'Faltan las unidades o la numeración.');s.config.configured=true;s.setupStep=4;});navigate('resumen');toast('Configuración finalizada. Ya podés cargar las expensas.');},
+    'monthly-form':async fd=>{const entries=[...fd.entries()].filter(([key,value])=>key.startsWith('amount:')&&String(value).trim()).map(([key,value])=>({unitId:key.slice(7),amount:Ledger.cents(value),period:ui.month,kind:'monthly'}));Ledger.require(entries.length,'Ingresá al menos un importe.');await commit(s=>entries.forEach(c=>Ledger.addCharge(s,c)));render();toast('Expensas guardadas. Los saldos se actualizaron.');},
+    'payment-form':fd=>reviewPayment(paymentData(fd))
+  };if(handlers[form.id])submitForm(form,handlers[form.id]);
+});
+document.addEventListener('click',async event=>{
+  const target=event.target.closest('[data-action]');if(!target)return;const action=target.dataset.action,id=target.dataset.id||'';
+  try{
+    if(action==='nav')navigate(id);
+    if(action==='unit-tab'){ui.unitTab=id;render();}
+    if(action==='add-unit'||action==='edit-unit')openUnit(id);
+    if(action==='add-person'||action==='edit-person')openPerson(id);
+    if(action==='close-modal')closeModal();
+    if(action==='opening-charge'||action==='edit-charge')openCharge(id);
+    if(action==='account')openAccount(id);
+    if(action==='pay-unit'){ui.payUnit=id;closeModal();navigate('pagos');}
+    if(action==='view-receipt')showReceipt(id);
+    if(action==='annul')askAnnul(id);
+    if(action==='preview-receipt')showReceiptPreview();
+    if(action==='print-preview'&&ui.receiptPreview)printReceipt(ui.receiptPreview);
+    if(action==='print'){const p=state.payments.find(p=>p.id===id);if(p)printReceipt(p);}
+    if(action==='export')exportBackup();
+    if(action==='setup-step'){const step=Number(id);if(step>=3)Ledger.require(state.units.length>0,'Agregá al menos una unidad para continuar.');await commit(s=>{s.setupStep=step;});render();}
+  }catch(error){toast(error.message);}
+});
+document.addEventListener('change',event=>{const el=event.target;if(el.id==='dashboard-month'||el.id==='charges-month'){if(Ledger.isPeriod(el.value)){ui.month=el.value;render();}}if(el.id==='unit-billing')toggleNewPerson();if(el.id==='pay-unit')updatePaymentSelection();if(el.name==='chargeIds')updatePaymentSummary();if(el.id==='receipt-status'){ui.receiptStatus=el.value;$('#receipt-list').innerHTML=receiptsRows();}if(el.id==='backup-file'&&el.files[0])importBackup(el.files[0]);});
+document.addEventListener('input',event=>{if(event.target.id==='pay-amount')updatePaymentSummary();if(event.target.id==='receipt-search'){ui.receiptSearch=event.target.value;$('#receipt-list').innerHTML=receiptsRows();}});
+window.addEventListener('hashchange',()=>{closeModal();render();$('#main').focus({preventScroll:true});});
+window.addEventListener('popstate',()=>{closeModal();render();});
+$('#dialog').addEventListener('cancel',()=>{modalHandler=null;$('#print-root').innerHTML='';document.body.classList.remove('printing');});
+window.addEventListener('afterprint',()=>{document.body.classList.remove('printing');$('#print-root').innerHTML='';});
+window.addEventListener('storage',event=>{if(event.key===STORAGE_KEY){toast('Los datos cambiaron en otra pestaña. Volvé a abrir el formulario antes de guardar.');}});
+function storageFailure(error){storageBlocked=true;$('#app').innerHTML=`<main class="fatal"><h1>No pudimos abrir los datos</h1><p>El navegador bloqueó el almacenamiento o el archivo guardado no es válido. Los registros existentes no fueron reemplazados.</p><p class="notice error">${esc(error.message)}</p><p>Probá abrir la aplicación con el mismo navegador de siempre y conservá una copia de los datos antes de intentar recuperarlos.</p><button class="btn primary" id="recover-raw">Descargar los datos guardados</button></main>`;$('#recover-raw').onclick=()=>{try{downloadData({app:'scaffidi-recovery',raw:localStorage.getItem(STORAGE_KEY)},'scaffidi-recuperacion.json');}catch(_){toast('El navegador impide acceder a los datos guardados.');}};}
+function registerAgentTools(){const context=document.modelContext;if(!context?.registerTool)return;const lifecycle=new AbortController();const defs=[{name:'read_consortium_balances',title:'Consultar saldos del consorcio',description:'Devuelve el saldo pendiente de cada unidad y los totales de cobros registrados. No modifica registros.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:true},execute(input){Ledger.require(input&&typeof input==='object'&&!Object.keys(input).length,'No se admiten parámetros.');return {currency:'ARS',amountsIn:'centavos',pending:Ledger.outstanding(state),collected:Ledger.activePayments(state).reduce((n,p)=>n+p.amount,0),units:state.units.map(u=>({id:u.id,label:u.label,pending:Ledger.outstanding(state,u.id)}))};}},{name:'start_payment_entry',title:'Abrir registro de pago',description:'Abre el formulario de pago para una unidad. No registra un cobro ni emite un recibo; la confirmación se realiza en la pantalla.',inputSchema:{type:'object',properties:{unitId:{type:'string'}},required:['unitId'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){Ledger.require(input&&typeof input.unitId==='string'&&Object.keys(input).length===1&&state.units.some(u=>u.id===input.unitId),'La unidad no existe.');Ledger.require(state.config.configured,'La configuración está incompleta.');ui.payUnit=input.unitId;closeModal();history.replaceState(null,'','#pagos');render();return {status:'form_opened',unitId:input.unitId,paymentRecorded:false};}}];for(const tool of defs){try{Promise.resolve(context.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch(_){}}window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});}
+try{readState();render();registerAgentTools();}catch(error){storageFailure(error);}
+</script>
+</body>
+</html>
