@@ -131,12 +131,23 @@
  .cut-line{margin:3mm 0;padding:0;font-size:6pt;line-height:1;gap:3mm}
 }
 
+
+.auth-screen{min-height:100vh;background:linear-gradient(140deg,#11243a 0%,#1a3655 48%,#264663 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:35px 20px}
+.auth-brand{display:flex;align-items:center;gap:14px;color:white;margin-bottom:28px}
+.auth-card{width:100%;max-width:470px;padding:36px;background:white;border-radius:16px;box-shadow:0 18px 60px #06122533}
+.auth-card h1{font-size:27px}.auth-card p{font-size:14px}.auth-foot{color:#bdcce0;font-size:12px;margin:24px 0 0}
+.account-email{max-width:230px;overflow-wrap:anywhere}.topbar{height:auto;min-height:80px;padding-top:14px;padding-bottom:14px}
+#connection-state[data-status=offline]{color:#ffd4b0}#connection-state[data-status=online]{color:#bdeddb}
+@media(max-width:760px){.auth-card{padding:25px}.account-email{display:none}.topbar{min-height:64px}#remote-banner{margin:14px 16px 0!important}}
+@media print{.auth-screen,#remote-banner{display:none!important}}
+
 </style>
 </head>
 <body>
-<div class="shell" id="app">
-<aside class="sidebar"><div class="brand"><div class="monogram">S</div><div class="wordmark">Scaffidi<small>Propiedades</small></div></div><div class="sidebar-label">Administración</div><nav class="nav" id="navigation" aria-label="Navegación principal"></nav><div class="sidebar-bottom"><div class="local-label"><span>Guardado en esta computadora<br><span style="color:#8ea3bb">Versión local · 1.1</span></span></div></div></aside>
-<div class="workspace"><header class="topbar"><div class="breadcrumb">Consorcios <span>/</span> <strong id="consortium-label">25 de Mayo 1246</strong></div><div class="account"><span>Scaffidi Propiedades</span><div class="avatar">SP</div></div></header><main class="main" id="main" tabindex="-1">
+<section class="auth-screen" id="auth-screen"><div class="auth-card"><h1>Scaffidi Propiedades</h1><p>Conectando con el sistema compartido…</p></div></section>
+<div class="shell hidden" id="app">
+<aside class="sidebar"><div class="brand"><div class="monogram">S</div><div class="wordmark">Scaffidi<small>Propiedades</small></div></div><div class="sidebar-label">Administración</div><nav class="nav" id="navigation" aria-label="Navegación principal"></nav><div class="sidebar-bottom"><div class="local-label"><span><span id="connection-state">Conectando…</span><br><span style="color:#8ea3bb">Versión compartida · 2.0</span></span></div></div></aside>
+<div class="workspace"><header class="topbar"><div class="breadcrumb">Consorcios <span>/</span> <strong id="consortium-label">25 de Mayo 1246</strong></div><div class="account" id="account-actions"><span>Scaffidi Propiedades</span></div></header><div id="remote-banner" class="notice warning hidden" style="margin:18px 40px 0" role="status"></div><main class="main" id="main" tabindex="-1">
 <div class="page-head"><div><div class="eyebrow">Scaffidi Propiedades</div><h1>Expensas, bajo control.</h1><p>Un espacio para administrar tu consorcio y sus recibos.</p></div></div>
 <div class="welcome"><div><span class="badge blue">Configuración inicial</span><h2 style="margin-top:16px">Empezá por los datos de tu consorcio</h2><p>Cargá las unidades y sus responsables. Después vas a poder registrar pagos e imprimir los recibos.</p></div><button class="btn primary" onclick="location.hash='configuracion'">Configurar consorcio →</button></div>
 <div class="stats"><div class="stat featured"><div class="stat-top">Cobrado este mes</div><strong>$ 0,00</strong><small>Sin pagos registrados</small></div><div class="stat"><div class="stat-top">Saldo pendiente total</div><strong>$ 0,00</strong><small>Todos los períodos</small></div><div class="stat"><div class="stat-top">Unidades registradas</div><strong>0</strong><small>Tu consorcio</small></div><div class="stat"><div class="stat-top">Recibos emitidos</div><strong>0</strong><small>Numeración correlativa</small></div></div>
@@ -278,33 +289,22 @@ const personName=id=>state.people.find(p=>p.id===id)?.name || 'Sin asignar';
 const unitName=id=>state.units.find(u=>u.id===id)?.label || 'Unidad';
 const empty=(title,text,action='',label='',i='receipt')=>`<div class="empty"><div class="empty-icon">${icon(i)}</div><h3>${title}</h3><p>${text}</p>${action?button(label,action,'primary') :''}</div>`;
 const head=(title,description,actions='')=>`<div class="page-head"><div><div class="eyebrow">Administración de consorcios</div><h1>${title}</h1><p>${description}</p></div>${actions}</div>`;
-let state,lastRaw=null,storageBlocked=false,ui={month:Ledger.today().slice(0,7),unitTab:'units',receiptSearch:'',receiptStatus:'all'},modalHandler=null,toastTimer;
+let state=Ledger.fresh(),ui={month:Ledger.today().slice(0,7),unitTab:'units',receiptSearch:'',receiptStatus:'all',dirty:false,mainDirty:false,pendingRevision:0},modalHandler=null,toastTimer;
 function toast(message){$('#toast').textContent=message;$('#toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.add('hidden'),5000);}
-function readState(){lastRaw=localStorage.getItem(STORAGE_KEY);state=lastRaw?Ledger.validate(JSON.parse(lastRaw)):Ledger.fresh();state.config=Ledger.receiptConfig(state.config);}
-async function commit(change){
-  const run=()=>{
-    Ledger.require(!storageBlocked,'El almacenamiento no está disponible. Recuperá los datos antes de continuar.');
-    const raw=localStorage.getItem(STORAGE_KEY);
-    if(raw!==lastRaw){readState();render();throw new Error('Los datos cambiaron en otra pestaña. Cerrá este formulario y revisá el registro antes de continuar.');}
-    const next=JSON.parse(JSON.stringify(state));
-    const result=change(next);next.revision=state.revision+1;Ledger.validate(next);
-    const serialized=JSON.stringify(next);
-    try{localStorage.setItem(STORAGE_KEY,serialized);}catch(_){throw new Error('No se pudo guardar. El navegador no tiene espacio o bloqueó el almacenamiento. No se registró ningún cambio.');}
-    state=next;lastRaw=serialized;return result;
-  };
-  return location.protocol!=='file:' && navigator.locks?.request ? navigator.locks.request(STORAGE_KEY,run) : run();
-}
+async function commit(change){return commitShared(change);}
 function route(){const name=location.hash.slice(1);return ['resumen','unidades','expensas','pagos','recibos','configuracion','respaldos'].includes(name)?name:'resumen';}
 function navigate(to){if(route()!==to)history.pushState(null,'','#'+to);render();$('#main').focus({preventScroll:true});}
 function render(){
-  if(storageBlocked)return;
+  if(!cloudUser)return;
+  ui.mainDirty=false;ui.dirty=false;
   const current=route();
   const nav=[['resumen','Resumen','grid'],['unidades','Unidades y personas','building'],['expensas','Expensas','calendar'],['pagos','Registrar pago','wallet'],['recibos','Recibos','receipt'],['configuracion','Configuración','settings'],['respaldos','Respaldos','download']];
   $('#navigation').innerHTML=nav.map(([key,label,i])=>`<button data-action="nav" data-id="${key}" class="${key===current?'active':''}"${key===current?' aria-current="page"':''}>${icon(i)}${label}</button>`).join('');
   $('#consortium-label').textContent=state.config.name.replace(/^Consorcio de Propietarios\s*/i,'');
   const views={resumen:dashboard,unidades:unitsView,expensas:chargesView,pagos:paymentView,recibos:receiptsView,configuracion:settingsView,respaldos:backupsView};
-  $('#main').innerHTML=views[current]()+`<footer class="footer"><span>Scaffidi Propiedades · Gestión de expensas</span><span>Datos guardados solo en este navegador</span></footer>`;
+  $('#main').innerHTML=views[current]()+`<footer class="footer"><span>Scaffidi Propiedades · Gestión de expensas</span><span>Datos compartidos · Supabase</span></footer>`;
   if(current==='pagos')updatePaymentSelection();
+  stampSharedForms('#main form');updateSyncUI();
 }
 function dashboard(){
   const received=Ledger.activePayments(state).filter(p=>p.date.startsWith(ui.month));
@@ -367,9 +367,12 @@ function paymentView(){
 }
 function receiptsRows(){let list=state.payments.slice().reverse().filter(p=>ui.receiptStatus==='all'||(ui.receiptStatus==='void'?!!p.voidedAt:!p.voidedAt));const term=ui.receiptSearch.toLocaleLowerCase('es');if(term)list=list.filter(p=>[p.number,p.payer,p.snapshot.unit.label].join(' ').toLocaleLowerCase('es').includes(term));return list.length?`<div class="table-wrap"><table><thead><tr><th>Número / fecha</th><th>Persona / unidad</th><th>Medio de pago</th><th class="num">Importe</th><th>Estado</th><th></th></tr></thead><tbody>${list.map(p=>`<tr><td><strong class="mono">${esc(p.number)}</strong><small>${dateLabel(p.date)}</small></td><td>${esc(p.payer)}<small>${esc(p.snapshot.unit.label)}</small></td><td>${esc(p.method)}</td><td class="num">${money(p.amount)}</td><td><span class="badge ${p.voidedAt?'danger':'success'}">${p.voidedAt?'Anulado':'Emitido'}</span></td><td class="num">${button('Ver recibo','view-receipt','small',p.id)}</td></tr>`).join('')}</tbody></table></div>`:empty(state.payments.length?'No hay coincidencias':'Tu historial de recibos','Los comprobantes emitidos aparecen acá para consultarlos y volver a imprimirlos.');}
 function receiptsView(){return head('Recibos','Original y duplicado, siempre con el mismo número.',button('Registrar pago','nav','primary','pagos','plus'))+`<section class="panel"><div class="panel-header"><div class="toolbar"><input type="search" class="search-input" id="receipt-search" aria-label="Buscar recibos" placeholder="Buscar número, persona o unidad" value="${esc(ui.receiptSearch)}"><select id="receipt-status" aria-label="Estado de recibo">${[['all','Todos los estados'],['active','Emitidos'],['void','Anulados']].map(([v,l])=>option(v,l,ui.receiptStatus)).join('')}</select></div><span class="badge">${state.payments.length} comprobantes</span></div><div id="receipt-list">${receiptsRows()}</div></section>`;}
-function backupsView(){return head('Respaldos','Guardá una copia de tus registros y recuperala cuando la necesites.')+`<div class="grid-two"><section class="panel"><div class="panel-header"><h2>Copia de seguridad</h2></div><div class="panel-body"><p>Descargá un archivo con el consorcio, las personas, las unidades, las expensas y todos los recibos.</p><div class="summary-list"><div class="summary-line"><span>Unidades</span><strong>${state.units.length}</strong></div><div class="summary-line"><span>Personas</span><strong>${state.people.length}</strong></div><div class="summary-line"><span>Recibos, incluidos anulados</span><strong>${state.payments.length}</strong></div></div><div class="actions" style="margin-top:24px">${button('Descargar respaldo','export','primary','','download')}</div></div></section><section class="panel"><div class="panel-header"><h2>Recuperar un respaldo</h2></div><div class="panel-body"><p>Elegí un respaldo generado por esta aplicación. Podrás revisar sus datos antes de reemplazar los actuales.</p><label for="backup-file" class="label">Archivo de respaldo (.json)</label><input type="file" id="backup-file" accept=".json,application/json" style="margin-top:10px"></div></section></div><div class="notice warning">Esta versión guarda los datos en este navegador y esta computadora. Si borrás los datos del navegador o cambiás de equipo, necesitás un respaldo para recuperarlos. Usá una sola copia de trabajo y descargá un respaldo después de cada jornada de cobros.</div>`;}
-function openModal(title,body,handler=null,wide=false){const dialog=$('#dialog');if(dialog.open)dialog.close();dialog.className=wide?'receipt-dialog':'';dialog.innerHTML=`<div class="dialog-head"><h2 id="dialog-title">${title}</h2><button type="button" class="close" data-action="close-modal" aria-label="Cerrar">×</button></div>${body}`;modalHandler=handler;dialog.showModal();}
-function closeModal(){const d=$('#dialog');if(d.open)d.close();modalHandler=null;$('#print-root').innerHTML='';document.body.classList.remove('printing');}
+function backupsView(){
+  const emptyBook=!state.people.length&&!state.units.length&&!state.charges.length&&!state.payments.length;
+  return head('Respaldos e importación','Descargá una copia de los registros compartidos.')+`<div class="grid-two"><section class="panel"><div class="panel-header"><h2>Copia del consorcio</h2></div><div class="panel-body"><p>Incluye personas, unidades, expensas y todos los recibos, también los anulados.</p><div class="summary-list"><div class="summary-line"><span>Unidades</span><strong>${state.units.length}</strong></div><div class="summary-line"><span>Recibos</span><strong>${state.payments.length}</strong></div><div class="summary-line"><span>Revisión compartida</span><strong>${state.revision}</strong></div></div><div class="actions" style="margin-top:24px">${button('Descargar respaldo','export','primary','','download')}</div></div></section><section class="panel"><div class="panel-header"><h2>Importar desde la versión local</h2></div><div class="panel-body">${emptyBook&&cloudRole==='admin'?'<p>Traé una copia de la versión anterior para conservar personas, saldos y numeración. La importación se realiza una sola vez, con el libro vacío.</p><label for="backup-file" class="label">Respaldo (.json)</label><input type="file" id="backup-file" accept=".json,application/json" style="margin-top:10px">':'<p>La importación inicial está disponible para el administrador cuando el libro está vacío. Los registros compartidos no se reemplazan con una copia antigua.</p>'}</div></section></div><div class="notice">Los datos se guardan en Supabase y se comparten entre las computadoras autorizadas. Descargá una copia después de cada jornada de cobros y antes de realizar cambios importantes. La recuperación de un libro en uso debe hacerse en una base nueva, revisando primero los recibos posteriores al respaldo.</div>`;
+}
+function openModal(title,body,handler=null,wide=false){const dialog=$('#dialog');if(dialog.open)dialog.close();dialog.className=wide?'receipt-dialog':'';dialog.innerHTML=`<div class="dialog-head"><h2 id="dialog-title">${title}</h2><button type="button" class="close" data-action="close-modal" aria-label="Cerrar">×</button></div>${body}`;modalHandler=handler;dialog.showModal();stampSharedForms('#dialog form');}
+function closeModal(){const d=$('#dialog');if(d.open)d.close();modalHandler=null;$('#print-root').innerHTML='';document.body.classList.remove('printing');ui.dirty=!!ui.mainDirty;}
 function openPerson(personId=''){
   const p=state.people.find(p=>p.id===personId)||{name:'',dni:'',cuit:'',phone:'',email:'',address:'',vat:''};
   openModal(personId?'Editar persona':'Agregar persona',`<form id="modal-form" class="dialog-body"><div class="form-grid"><div class="field full">${field('Nombre y apellido','person-name',p.name,'required maxlength="120" autocomplete="name"')}</div>${field('DNI','person-dni',p.dni,'maxlength="20"')}${field('CUIT / CUIL','person-cuit',p.cuit,'maxlength="20"')}${field('Teléfono','person-phone',p.phone,'maxlength="40" type="tel"')}${field('Correo electrónico','person-email',p.email,'maxlength="160" type="email"')}<div class="field full">${field('Domicilio','person-address',p.address,'maxlength="200"')}</div><div class="field full">${field('Condición frente al IVA','person-vat',p.vat,'maxlength="80"','Opcional. Se incluye en el recibo si está informado.')}</div></div><div class="form-foot">${button('Cancelar','close-modal')}<button class="btn primary" type="submit">Guardar persona</button></div><div class="form-error" role="alert"></div></form>`,async fd=>{
@@ -411,7 +414,8 @@ function updatePaymentSummary(){
 function paymentData(fd){const unit=state.units.find(u=>u.id===fd.get('unitId'));const payer=String(fd.get('payer')||'').trim();const p=unit?state.people.find(p=>p.id===unit.billingPersonId):null;return {unitId:String(fd.get('unitId')),payerId:p?.name===payer?p.id:'',payer,date:String(fd.get('pay-date')),method:String(fd.get('method')),note:String(fd.get('note')||''),amount:Ledger.cents(fd.get('amount')),chargeIds:fd.getAll('chargeIds')};}
 function reviewPayment(data){
   const preview=Ledger.issue(JSON.parse(JSON.stringify(state)),data);
-  openModal('Revisar y confirmar el cobro',`<form id="modal-form" class="dialog-body"><span class="badge blue">Todavía sin emitir</span><div class="summary-list" style="margin-top:15px"><div class="summary-line"><span>Unidad</span><strong>${esc(preview.snapshot.unit.label)}</strong></div><div class="summary-line"><span>Recibí de</span><strong>${esc(preview.payer)}</strong></div><div class="summary-line"><span>Fecha / medio</span><strong>${dateLabel(preview.date)} · ${esc(preview.method)}</strong></div><div class="summary-line"><span>Próximo número</span><strong>${esc(preview.number)}</strong></div></div><div class="balance-box"><span class="small muted">Pago recibido</span><div class="amount-large">${money(preview.amount)}</div><p class="small muted" style="margin:7px 0 0">${Ledger.words(preview.amount)}</p></div><h3>Aplicación del pago</h3>${preview.allocations.map(a=>`<div class="summary-line"><span>${periodLabel(a.period)}</span><strong>${money(a.amount)}</strong></div>`).join('')}<p class="small muted" style="margin-top:18px">Saldo pendiente de la unidad después del pago: ${money(preview.snapshot.balanceAfter)}.</p><label class="check"><input type="checkbox" required>Confirmo que recibí este pago.</label><div class="form-foot">${button('Volver a editar','close-modal')}<button type="submit" class="btn primary">Confirmar y emitir recibo</button></div><div class="form-error" role="alert"></div></form>`,async()=>{const p=await commit(s=>Ledger.issue(s,data));closeModal();navigate('recibos');showReceipt(p.id);toast('Pago guardado y recibo '+p.number+' emitido.');});
+  const requestId=Ledger.id(),reviewRevision=state.revision;
+  openModal('Revisar y confirmar el cobro',`<form id="modal-form" class="dialog-body"><span class="badge blue">Todavía sin emitir</span><p class="small muted" style="margin-top:12px">El servidor confirma el número al registrar el cobro.</p><div class="summary-list" style="margin-top:15px"><div class="summary-line"><span>Unidad</span><strong>${esc(preview.snapshot.unit.label)}</strong></div><div class="summary-line"><span>Recibí de</span><strong>${esc(preview.payer)}</strong></div><div class="summary-line"><span>Fecha / medio</span><strong>${dateLabel(preview.date)} · ${esc(preview.method)}</strong></div><div class="summary-line"><span>Número previsto</span><strong>${esc(preview.number)}</strong></div></div><div class="balance-box"><span class="small muted">Pago recibido</span><div class="amount-large">${money(preview.amount)}</div><p class="small muted" style="margin:7px 0 0">${Ledger.words(preview.amount)}</p></div><h3>Aplicación del pago</h3>${preview.allocations.map(a=>`<div class="summary-line"><span>${periodLabel(a.period)}</span><strong>${money(a.amount)}</strong></div>`).join('')}<p class="small muted" style="margin-top:18px">Saldo pendiente de la unidad después del pago: ${money(preview.snapshot.balanceAfter)}.</p><label class="check"><input type="checkbox" required>Confirmo que recibí este pago.</label><div class="form-foot">${button('Volver a editar','close-modal')}<button type="submit" class="btn primary">Confirmar y emitir recibo</button></div><div class="form-error" role="alert"></div></form>`,async()=>{const p=await runSharedCommand('issue',data,requestId,reviewRevision);closeModal();navigate('recibos');showReceipt(p.id);toast('Pago guardado y recibo '+p.number+' emitido.');});
 }
 function receiptCopy(p,copy,allocations,page,pages){
   const c=Ledger.receiptConfig(p.snapshot.config),u=p.snapshot.unit,person=p.snapshot.payer;
@@ -468,21 +472,25 @@ function showReceiptPreview(){
   openModal('Vista previa del recibo',`<div class="receipt-tools"><div><span class="badge blue">Modelo de muestra</span><p class="small muted" style="margin:8px 0 0">Datos de ejemplo. No registra un pago ni consume un número.</p></div>${button('Imprimir prueba','print-preview','primary','','print')}</div><div class="paper">${receiptPages(ui.receiptPreview)}</div>`,null,true);
 }
 function printReceipt(p){$('#print-root').innerHTML=receiptPages(p);document.body.classList.add('printing');window.print();}
-function askAnnul(paymentId){const p=state.payments.find(p=>p.id===paymentId);if(!p||p.voidedAt)return;openModal('Anular recibo '+esc(p.number),`<form id="modal-form" class="dialog-body"><div class="notice warning">Se descontarán ${money(p.amount)} de lo cobrado y el importe volverá al saldo pendiente de ${esc(p.snapshot.unit.label)}. El recibo quedará guardado como anulado y su número no se reutilizará.</div><div class="field"><label for="void-reason">Motivo de anulación</label><textarea id="void-reason" name="reason" required minlength="5" maxlength="240" placeholder="Explicá el motivo de la corrección"></textarea></div><div class="form-foot">${button('Cancelar','view-receipt','',p.id)}<button class="btn danger" type="submit">Confirmar anulación</button></div><div class="form-error" role="alert"></div></form>`,async fd=>{await commit(s=>Ledger.annul(s,paymentId,String(fd.get('reason'))));closeModal();render();showReceipt(paymentId);toast('Recibo anulado. El saldo de la unidad fue actualizado.');});}
+function askAnnul(paymentId){const p=state.payments.find(p=>p.id===paymentId);if(!p||p.voidedAt)return;const annulRequestId=Ledger.id(),annulRevision=state.revision;openModal('Anular recibo '+esc(p.number),`<form id="modal-form" class="dialog-body"><div class="notice warning">Se descontarán ${money(p.amount)} de lo cobrado y el importe volverá al saldo pendiente de ${esc(p.snapshot.unit.label)}. El recibo quedará guardado como anulado y su número no se reutilizará.</div><div class="field"><label for="void-reason">Motivo de anulación</label><textarea id="void-reason" name="reason" required minlength="5" maxlength="240" placeholder="Explicá el motivo de la corrección"></textarea></div><div class="form-foot">${button('Cancelar','view-receipt','',p.id)}<button class="btn danger" type="submit">Confirmar anulación</button></div><div class="form-error" role="alert"></div></form>`,async fd=>{await runSharedCommand('annul',{paymentId,reason:String(fd.get('reason'))},annulRequestId,annulRevision);closeModal();render();showReceipt(paymentId);toast('Recibo anulado. El saldo de la unidad fue actualizado.');});}
 function downloadData(value,name){const blob=new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function exportBackup(){const time=new Date().toISOString().slice(11,19).replaceAll(':','');downloadData({app:'scaffidi-expensas',exportedAt:new Date().toISOString(),data:state},`scaffidi-respaldo-${Ledger.today()}-${time}.json`);toast('Respaldo preparado para descargar.');}
 async function importBackup(file){
-  try{Ledger.require(file&&file.size<=10000000,'Elegí un respaldo de hasta 10 MB.');const parsed=JSON.parse(await file.text());Ledger.require(parsed.app==='scaffidi-expensas','El archivo no es un respaldo de Scaffidi Propiedades.');const incoming=Ledger.validate(parsed.data);
-    const conflicts=state.payments.filter(p=>{const candidate=incoming.payments.find(x=>x.number===p.number);return !candidate||JSON.stringify(candidate)!==JSON.stringify(p);});
-    Ledger.require(conflicts.length===0,'Este respaldo omite o cambia recibos ya registrados en esta computadora. Recuperalo en otro navegador vacío para no perder ni reutilizar numeración.');
-    if(state.payments.length)Ledger.require(incoming.config.prefix===state.config.prefix&&incoming.config.lastNumber>=state.config.lastNumber,'El respaldo retrocede la numeración actual.');
-    openModal('Revisar respaldo',`<form id="modal-form" class="dialog-body"><p>Se recuperarán los registros de <strong>${esc(incoming.config.name)}</strong>.</p><div class="summary-list"><div class="summary-line"><span>Unidades / personas</span><strong>${incoming.units.length} / ${incoming.people.length}</strong></div><div class="summary-line"><span>Recibos</span><strong>${incoming.payments.length}</strong></div><div class="summary-line"><span>Saldo pendiente</span><strong>${money(Ledger.outstanding(incoming))}</strong></div></div><div class="notice warning" style="margin-top:20px">El respaldo reemplazará los datos de este navegador. Descargá antes una copia de los datos actuales.</div>${button('Descargar datos actuales','export')}<label class="check" style="margin-top:20px"><input type="checkbox" required>Quiero reemplazar los datos con este respaldo.</label><div class="form-foot">${button('Cancelar','close-modal')}<button class="btn primary" type="submit">Restaurar respaldo</button></div><div class="form-error" role="alert"></div></form>`,async()=>{await commit(s=>{s.config=Ledger.receiptConfig(incoming.config);s.setupStep=incoming.setupStep;s.people=incoming.people;s.units=incoming.units;s.charges=incoming.charges;s.payments=incoming.payments;});closeModal();navigate('resumen');toast('Respaldo restaurado.');});
+  try{
+    Ledger.require(cloudRole==='admin','Solo el administrador puede importar.');
+    Ledger.require(!state.people.length&&!state.units.length&&!state.charges.length&&!state.payments.length,'La importación requiere un libro vacío.');
+    Ledger.require(file&&file.size<=10000000,'Elegí un respaldo de hasta 10 MB.');
+    const parsed=JSON.parse(await file.text());Ledger.require(parsed.app==='scaffidi-expensas','El archivo no es un respaldo de Scaffidi.');
+    const incoming=Ledger.validate(parsed.data),requestId=Ledger.id(),importRevision=state.revision;
+    incoming.config=Ledger.receiptConfig(incoming.config);
+    openModal('Importar registros anteriores',`<form id="modal-form" class="dialog-body"><p>Se cargarán los datos de <strong>${esc(incoming.config.name)}</strong> en el libro compartido.</p><div class="summary-list"><div class="summary-line"><span>Unidades / personas</span><strong>${incoming.units.length} / ${incoming.people.length}</strong></div><div class="summary-line"><span>Recibos</span><strong>${incoming.payments.length}</strong></div><div class="summary-line"><span>Saldo pendiente</span><strong>${money(Ledger.outstanding(incoming))}</strong></div><div class="summary-line"><span>Último número</span><strong>${incoming.config.lastNumber??'Sin definir'}</strong></div></div><label class="check" style="margin-top:20px"><input type="checkbox" required>Este es el respaldo más reciente y quiero compartir estos registros.</label><div class="form-foot">${button('Cancelar','close-modal')}<button class="btn primary" type="submit">Importar a Supabase</button></div><div class="form-error" role="alert"></div></form>`,async()=>{await runSharedCommand('import',{state:incoming},requestId,importRevision);closeModal();navigate('resumen');toast('Registros importados. Ya están disponibles en las otras computadoras.');});
   }catch(error){toast(error.message);}
   const input=$('#backup-file');if(input)input.value='';
 }
-async function submitForm(form,operation){if(form.dataset.busy)return;form.dataset.busy='true';const submit=form.querySelector('button[type="submit"]');const errorBox=form.querySelector('.form-error');if(submit)submit.disabled=true;if(errorBox)errorBox.innerHTML='';try{await operation(new FormData(form));}catch(error){if(errorBox)errorBox.innerHTML=`<div class="notice error" style="margin:18px 0 0">${esc(error.message)}</div>`;else toast(error.message);}finally{delete form.dataset.busy;if(submit)submit.disabled=false;}}
+async function submitForm(form,operation){if(form.dataset.busy)return;form.dataset.busy='true';const submit=form.querySelector('button[type="submit"]');const errorBox=form.querySelector('.form-error');if(submit)submit.disabled=true;if(errorBox)errorBox.innerHTML='';try{if(form.id!=='login-form'){Ledger.require(cloudUser,'Iniciá sesión para continuar.');Ledger.require(Number(form.dataset.revision)===state.revision&&(!ui.pendingRevision||ui.pendingRevision<=state.revision),'Hay cambios de otra computadora. Actualizá los datos y revisá el formulario.');}await operation(new FormData(form));}catch(error){if(errorBox)errorBox.innerHTML=`<div class="notice error" style="margin:18px 0 0">${esc(error.message)}</div>`;else toast(error.message);}finally{delete form.dataset.busy;if(submit)submit.disabled=false;}}
 document.addEventListener('submit',event=>{
   const form=event.target;if(!(form instanceof HTMLFormElement))return;event.preventDefault();
+  if(form.id==='login-form'){void loginShared(form);return;}
   const handlers={
     'modal-form':fd=>modalHandler?.(fd),
     'config-form':async fd=>{const config={...state.config};for(const k of ['agency','name','address','cuit','vat','grossIncome','establishment','stampOffice','consumerNotice','startActivity','signer','prefix'])config[k]=String(fd.get(k)||'').trim();const n=String(fd.get('lastNumber'));Ledger.require(/^\d+$/.test(n),'Ingresá el último número emitido.');config.lastNumber=Number(n);await commit(s=>{if(s.payments.length)Ledger.require(config.prefix===s.config.prefix&&config.lastNumber===s.config.lastNumber,'No se puede cambiar la numeración después de emitir recibos.');s.config=config;if(!s.config.configured)s.setupStep=2;});render();toast('Datos del consorcio guardados.');},
@@ -495,6 +503,8 @@ document.addEventListener('click',async event=>{
   const target=event.target.closest('[data-action]');if(!target)return;const action=target.dataset.action,id=target.dataset.id||'';
   try{
     if(action==='nav')navigate(id);
+    if(action==='logout')await logoutShared();
+    if(action==='refresh-cloud')await refreshShared();
     if(action==='unit-tab'){ui.unitTab=id;render();}
     if(action==='add-unit'||action==='edit-unit')openUnit(id);
     if(action==='add-person'||action==='edit-person')openPerson(id);
@@ -517,10 +527,150 @@ window.addEventListener('hashchange',()=>{closeModal();render();$('#main').focus
 window.addEventListener('popstate',()=>{closeModal();render();});
 $('#dialog').addEventListener('cancel',()=>{modalHandler=null;$('#print-root').innerHTML='';document.body.classList.remove('printing');});
 window.addEventListener('afterprint',()=>{document.body.classList.remove('printing');$('#print-root').innerHTML='';});
-window.addEventListener('storage',event=>{if(event.key===STORAGE_KEY){toast('Los datos cambiaron en otra pestaña. Volvé a abrir el formulario antes de guardar.');}});
-function storageFailure(error){storageBlocked=true;$('#app').innerHTML=`<main class="fatal"><h1>No pudimos abrir los datos</h1><p>El navegador bloqueó el almacenamiento o el archivo guardado no es válido. Los registros existentes no fueron reemplazados.</p><p class="notice error">${esc(error.message)}</p><p>Probá abrir la aplicación con el mismo navegador de siempre y conservá una copia de los datos antes de intentar recuperarlos.</p><button class="btn primary" id="recover-raw">Descargar los datos guardados</button></main>`;$('#recover-raw').onclick=()=>{try{downloadData({app:'scaffidi-recovery',raw:localStorage.getItem(STORAGE_KEY)},'scaffidi-recuperacion.json');}catch(_){toast('El navegador impide acceder a los datos guardados.');}};}
-function registerAgentTools(){const context=document.modelContext;if(!context?.registerTool)return;const lifecycle=new AbortController();const defs=[{name:'read_consortium_balances',title:'Consultar saldos del consorcio',description:'Devuelve el saldo pendiente de cada unidad y los totales de cobros registrados. No modifica registros.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:true},execute(input){Ledger.require(input&&typeof input==='object'&&!Object.keys(input).length,'No se admiten parámetros.');return {currency:'ARS',amountsIn:'centavos',pending:Ledger.outstanding(state),collected:Ledger.activePayments(state).reduce((n,p)=>n+p.amount,0),units:state.units.map(u=>({id:u.id,label:u.label,pending:Ledger.outstanding(state,u.id)}))};}},{name:'start_payment_entry',title:'Abrir registro de pago',description:'Abre el formulario de pago para una unidad. No registra un cobro ni emite un recibo; la confirmación se realiza en la pantalla.',inputSchema:{type:'object',properties:{unitId:{type:'string'}},required:['unitId'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){Ledger.require(input&&typeof input.unitId==='string'&&Object.keys(input).length===1&&state.units.some(u=>u.id===input.unitId),'La unidad no existe.');Ledger.require(state.config.configured,'La configuración está incompleta.');ui.payUnit=input.unitId;closeModal();history.replaceState(null,'','#pagos');render();return {status:'form_opened',unitId:input.unitId,paymentRecorded:false};}}];for(const tool of defs){try{Promise.resolve(context.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch(_){}}window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});}
-try{readState();render();registerAgentTools();}catch(error){storageFailure(error);}
+// Authentication changes across tabs are handled by the official Supabase client.
+
+function registerAgentTools(){const context=document.modelContext;if(!context?.registerTool)return;const lifecycle=new AbortController();const defs=[{name:'read_consortium_balances',title:'Consultar saldos del consorcio',description:'Devuelve el saldo pendiente de cada unidad y los totales de cobros registrados. No modifica registros.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:true},execute(input){Ledger.require(cloudUser,'Iniciá sesión.');Ledger.require(input&&typeof input==='object'&&!Object.keys(input).length,'No se admiten parámetros.');return {currency:'ARS',amountsIn:'centavos',pending:Ledger.outstanding(state),collected:Ledger.activePayments(state).reduce((n,p)=>n+p.amount,0),units:state.units.map(u=>({id:u.id,label:u.label,pending:Ledger.outstanding(state,u.id)}))};}},{name:'start_payment_entry',title:'Abrir registro de pago',description:'Abre el formulario de pago para una unidad. No registra un cobro ni emite un recibo; la confirmación se realiza en la pantalla.',inputSchema:{type:'object',properties:{unitId:{type:'string'}},required:['unitId'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){Ledger.require(cloudUser,'Iniciá sesión.');Ledger.require(input&&typeof input.unitId==='string'&&Object.keys(input).length===1&&state.units.some(u=>u.id===input.unitId),'La unidad no existe.');Ledger.require(state.config.configured,'La configuración está incompleta.');ui.payUnit=input.unitId;closeModal();history.replaceState(null,'','#pagos');render();return {status:'form_opened',unitId:input.unitId,paymentRecorded:false};}}];for(const tool of defs){try{Promise.resolve(context.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch(_){}}window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});}
+// Start only after the shared-data and authentication adapters load.
+</script>
+<script src="./supabase.min.js"></script>
+<script src="./cloud.js"></script>
+<script id="cloud-application">
+// This source is embedded into index.html by tools/connect-app.mjs.
+// Only the publishable key belongs in the browser. No service_role / secret key.
+const SUPABASE_CONFIG=Object.freeze({url:'https://glmlpgqzunaodyaydxzp.supabase.co',key:'sb_publishable_u6R3fcVJHNLnWB_GXjk15A_0igjVMfO'});
+let remote=null,cloudUser=null,cloudRole=null,cloudGeneration=0,cloudConnecting=false,cloudSyncing=false,cloudSaving=false,cloudRealtime=false,cloudPoll=null,cloudTools=false,cloudAuthSubscription=null;
+
+function renderLogin(message='',loading=false){
+  $('#app').classList.add('hidden');$('#auth-screen').classList.remove('hidden');
+  $('#auth-screen').innerHTML=`<div class="auth-brand"><div class="monogram">S</div><div class="wordmark">Scaffidi<small>Propiedades</small></div></div><section class="auth-card"><div class="eyebrow">Administración de consorcios</div><h1>${loading?'Conectando con tu consorcio':'Ingresá a tu cuenta'}</h1><p class="muted">Expensas y recibos compartidos entre tus computadoras.</p>${message?`<div class="notice ${loading?'':'warning'}" role="alert">${esc(message)}</div>`:''}${loading?'<p class="small muted">Verificando el acceso y los datos guardados…</p>':`<form id="login-form"><div class="field"><label for="login-email">Correo electrónico</label><input id="login-email" name="email" type="email" autocomplete="username" required placeholder="Tu correo autorizado"></div><div class="field" style="margin-top:18px"><label for="login-password">Contraseña</label><input id="login-password" name="password" type="password" autocomplete="current-password" required></div><button class="btn primary" type="submit" style="width:100%;margin-top:24px">Ingresar</button><div class="form-error" role="alert"></div></form><p class="small muted" style="margin:20px 0 0">Acceso exclusivo para cuentas habilitadas por la administración.</p>`}</section><p class="auth-foot">Scaffidi Propiedades · Gestión de expensas</p>`;
+}
+function updateSyncUI(){
+  const node=$('#connection-state');if(!node)return;
+  const offline=navigator.onLine===false;
+  node.textContent=offline?'Sin conexión':cloudSaving?'Guardando…':ui.pendingRevision>state.revision?'Hay cambios pendientes':cloudRealtime?'Conectado en tiempo real':'Conectado · comprobación periódica';
+  node.dataset.status=offline?'offline':cloudRealtime?'online':'pending';
+  const banner=$('#remote-banner');if(!banner)return;
+  const pending=ui.pendingRevision>state.revision;
+  banner.classList.toggle('hidden',!pending&&!offline);
+  banner.innerHTML=offline?'No hay conexión. Los nuevos cobros se podrán confirmar cuando vuelva internet.':pending?`Otra computadora actualizó el consorcio. Tu formulario se conserva hasta que decidas actualizar. ${button('Actualizar datos','refresh-cloud','small')}`:'';
+}
+function stampSharedForms(selector){for(const form of document.querySelectorAll(selector))form.dataset.revision=String(state.revision);}
+function sharedError(error){
+  if(error?.kind==='stale'){ui.pendingRevision=Math.max(ui.pendingRevision||0,state.revision+1);updateSyncUI();}
+  if(error?.kind==='unauthorized'){clearCloudSession();renderLogin(error.message);}
+  return error;
+}
+function acceptSharedState(incoming){
+  const validated=Ledger.validate(incoming);
+  if(validated.revision<state.revision)return false;
+  state=validated;state.config=Ledger.receiptConfig(state.config);
+  if((ui.pendingRevision||0)<=state.revision)ui.pendingRevision=0;
+  return true;
+}
+async function syncCloud(force=false){
+  if(!cloudUser||cloudSyncing||cloudSaving||navigator.onLine===false)return;
+  cloudSyncing=true;const generation=cloudGeneration;
+  try{
+    const revision=Number(await remote.revision());
+    if(generation!==cloudGeneration)return;
+    if(revision>state.revision){
+      ui.pendingRevision=Math.max(ui.pendingRevision||0,revision);
+      if(force||(!ui.dirty&&!$('#dialog').open)){
+        const fresh=await remote.read();if(generation!==cloudGeneration)return;
+        if(acceptSharedState(fresh)){ui.dirty=false;render();}
+      }
+    }
+  }catch(error){sharedError(error);if(error.kind!=='unauthorized'){cloudRealtime=false;if(force)throw error;}}
+  finally{cloudSyncing=false;updateSyncUI();}
+}
+async function runSharedCommand(action,payload,requestId=Ledger.id(),expectedRevision=state.revision){
+  Ledger.require(cloudUser&&remote,'Iniciá sesión para guardar.');
+  Ledger.require(navigator.onLine!==false,'No hay conexión. El cobro todavía no se confirmó.');
+  Ledger.require(!cloudSaving,'Esperá a que termine la operación anterior.');
+  const generation=cloudGeneration;
+  cloudSaving=true;updateSyncUI();
+  try{
+    const response=await remote.command(action,payload,expectedRevision,requestId);
+    Ledger.require(generation===cloudGeneration&&cloudUser,'La sesión cambió. Volvé a iniciar sesión para consultar el resultado.');
+    acceptSharedState(response.state);ui.mainDirty=false;ui.dirty=false;return response.result;
+  }catch(error){throw sharedError(error);}
+  finally{cloudSaving=false;updateSyncUI();}
+}
+async function commitShared(change){
+  Ledger.require(!ui.pendingRevision||ui.pendingRevision<=state.revision,'Hay cambios de otra computadora. Actualizá los datos antes de guardar.');
+  const next=JSON.parse(JSON.stringify(state));
+  const result=change(next);Ledger.validate(next);
+  await runSharedCommand('save',{state:next});return result;
+}
+function clearCloudSession(){
+  cloudGeneration++;cloudUser=null;cloudRole=null;cloudRealtime=false;cloudConnecting=false;
+  if(cloudPoll)clearInterval(cloudPoll);cloudPoll=null;remote?.stop();closeModal();
+  state=Ledger.fresh();ui.pendingRevision=0;ui.dirty=false;ui.receiptPreview=null;
+  $('#main').innerHTML='';$('#navigation').innerHTML='';$('#remote-banner').innerHTML='';
+  $('#app').classList.add('hidden');
+}
+async function connectSession(session){
+  if(!session){clearCloudSession();renderLogin();return;}
+  if(cloudConnecting)return;
+  if(cloudUser?.id===session.user.id){void syncCloud();return;}
+  clearCloudSession();cloudConnecting=true;
+  const generation=cloudGeneration;
+  renderLogin('',true);
+  try{
+    const [data,role]=await Promise.all([remote.read(),remote.role(session.user.id)]);
+    if(generation!==cloudGeneration)return;
+    state=Ledger.validate(data);state.config=Ledger.receiptConfig(state.config);cloudUser=session.user;cloudRole=role;
+    $('#auth-screen').classList.add('hidden');$('#app').classList.remove('hidden');
+    $('#account-actions').innerHTML=`<span class="small account-email">${esc(cloudUser.email||'Usuario autorizado')}</span>${button('Salir','logout','small')}<div class="avatar">SP</div>`;
+    render();
+    remote.subscribe(revision=>{
+      if(generation!==cloudGeneration)return;
+      if(revision>state.revision){ui.pendingRevision=Math.max(ui.pendingRevision||0,revision);updateSyncUI();void syncCloud();}
+    },status=>{
+      if(generation!==cloudGeneration)return;
+      cloudRealtime=status==='SUBSCRIBED';updateSyncUI();if(cloudRealtime)void syncCloud();
+    });
+    cloudPoll=setInterval(()=>{if(document.visibilityState!=='hidden')void syncCloud();},30000);
+    if(!cloudTools){registerAgentTools();cloudTools=true;}
+  }catch(error){if(generation!==cloudGeneration)return;clearCloudSession();renderLogin(error.message||'No se pudo cargar el consorcio.');}
+  finally{if(generation===cloudGeneration)cloudConnecting=false;}
+}
+async function loginShared(form){
+  await submitForm(form,async fd=>{
+    Ledger.require(remote,'No se cargó la conexión. Revisá que cloud.js y supabase.min.js estén junto a index.html.');
+    const session=await remote.signIn(String(fd.get('email')).trim(),String(fd.get('password')));
+    const password=$('#login-password');if(password)password.value='';
+    await connectSession(session);
+  });
+}
+async function refreshShared(){
+  if((ui.dirty||$('#dialog').querySelector('form'))&&!window.confirm('Actualizar descartará los cambios del formulario que todavía no guardaste. ¿Continuar?'))return;
+  ui.mainDirty=false;ui.dirty=false;closeModal();await syncCloud(true);render();
+}
+async function logoutShared(){
+  if(cloudSaving){toast('Esperá a que termine la operación antes de salir.');return;}
+  await remote.signOut();clearCloudSession();renderLogin();
+}
+async function startApplication(){
+  renderLogin('',true);
+  if(!globalThis.SupabaseSDK?.createClient||!globalThis.ScaffidiRemote){renderLogin('Faltan archivos de conexión. Copiá index.html, cloud.js y supabase.min.js en la misma carpeta.');return;}
+  if(location.protocol==='file:'){renderLogin('Esta versión compartida debe abrirse desde la dirección web publicada o una vista previa local. La versión anterior sigue disponible en tu carpeta original.');return;}
+  remote=new ScaffidiRemote(SupabaseSDK,SUPABASE_CONFIG);
+  cloudAuthSubscription=remote.onAuth((event,session)=>{
+    if(event==='SIGNED_OUT'){clearCloudSession();renderLogin();}
+    else if(event==='SIGNED_IN'&&!cloudConnecting&&cloudUser?.id!==session?.user?.id)void connectSession(session);
+  });
+  try{await connectSession(await remote.session());}catch(error){renderLogin(error.message);}
+}
+document.addEventListener('input',event=>{if(event.target.closest('#main form'))ui.mainDirty=true;if(event.target.closest('#main form,#dialog form'))ui.dirty=true;});
+document.addEventListener('change',event=>{if(event.target.closest('#main form'))ui.mainDirty=true;if(event.target.closest('#main form,#dialog form'))ui.dirty=true;});
+window.addEventListener('online',()=>{updateSyncUI();void syncCloud();});
+window.addEventListener('offline',updateSyncUI);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')void syncCloud();});
+window.addEventListener('pagehide',()=>{remote?.stop();if(cloudPoll)clearInterval(cloudPoll);});
+window.addEventListener('pageshow',event=>{if(event.persisted&&cloudUser){const sessionUser=cloudUser;cloudUser=null;void remote.session().then(s=>connectSession(s));}});
+startApplication();
+
 </script>
 </body>
 </html>
